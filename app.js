@@ -26,13 +26,15 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+
+
 app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); 
 app.use(flash())
 app.use(nocache())
 app.use((req, res, next) => {
-  res.locals.messages = req.flash()
+res.locals.messages = req.flash()
   next()
 })
 app.use(passport.initialize())
