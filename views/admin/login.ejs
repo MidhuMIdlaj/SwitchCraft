@@ -1,0 +1,197 @@
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #2e2e2e, #1a1a1a);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(17, 17, 17, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            position: relative;
+            animation: slideIn 1s ease-out;
+            width: 400px; /* Increased width */
+            max-width: 90%;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 100px;
+            filter: drop-shadow(0 0 10px #ff9900);
+            animation: pulse 2s infinite;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background-color: #333;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background-color: #444;
+            box-shadow: 0 0 10px #ff9900;
+        }
+
+        .button {
+            background-color: #ff9900;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 153, 0, 0.5);
+            transition: transform 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 153, 0, 0.7);
+        }
+
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(255, 153, 0, 0.5);
+        }
+
+        /* Background Animation */
+        .floating-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .circle:nth-child(1) {
+            width: 50px;
+            height: 50px;
+            top: 20%;
+            left: 10%;
+            animation-duration: 7s;
+        }
+
+        .circle:nth-child(2) {
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            left: 80%;
+            animation-duration: 5s;
+        }
+
+        .circle:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 70%;
+            left: 30%;
+            animation-duration: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    <div class="container">
+        <div class="logo">
+            <!-- <img src="https://via.placeholder.com/100" alt="Logo"> -->
+        </div>
+        <h1>ADMIN PANEL</h1>
+        <p>Control panel login</p>
+        <form action="/admin/login" method="post">
+            <div class="form-group" >
+                <label for="username">email</label>
+                <input type="text" id="username" name="email" value="admin@switchcart.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="Admin@123">
+            </div>
+            <button type="submit" class="button">Login</button>
+
+            <h4>
+                <% if (messages.error) { %>
+                    <div class="alert alert-danger" style="color: #db4437;">
+                        <%= messages.error %>
+                    </div>
+                <% } %>
+            </h4>
+        </form>
+    </div>
+</body>
+</html>

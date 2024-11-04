@@ -1,0 +1,495 @@
+  <!-- Featured Start -->
+  <!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+     <!-- responsive  -->
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta content="Free HTML Templates" name="keywords">
+      <meta content="Free HTML Templates" name="description">
+      <link href="img/favicon.ico" rel="icon">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+      <link rel="stylesheet" href="style.css">
+
+      <style>
+  
+          .dropdown {
+              position: relative;
+              display: inline-block;
+          }
+          .dropdown-content {
+              display:none;
+              position: absolute;
+              background-color: white;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+              z-index: 1000;
+              right: 0;
+          }
+  
+          .dropdown-content a {
+              color: black;
+              padding: 12px 16px ;
+              text-decoration: none;
+              display: block;
+              width: 100%;
+          }
+  
+          .dropdown-content a:hover{
+              background-color: #f1f1f1;
+  
+          }
+  
+          .dropdown:hover  .dropdown-content{
+              display: block;
+          }
+          .header {
+              position: relative;
+              z-index: 500;
+          }
+                .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff; 
+        }
+
+        .dropdown-menu {
+            min-width: 200px; 
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; 
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px;
+        }
+
+
+        /* to responsive  */
+        @media (max-width: 1200px) {
+    .container-fluid {
+        padding: 0 15px;
+    }
+    .row.px-xl-5 {
+        padding: 0 10px;
+    }
+
+    /* Header section */
+    .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .col-lg-6.col-6 form {
+        width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    /* Header adjustments */
+    .row.align-items-center {
+        padding: 10px 0;
+    }
+    
+    .col-lg-3.col-6 h1 {
+        font-size: 1.5rem;
+    }
+    
+    /* Navigation */
+    .row.border-top.px-xl-5 {
+        position: relative;
+        top: 0;
+    }
+    
+    .col-12.text-center {
+        left: 0 !important;
+    }
+    
+    /* Categories section */
+    .cat-item {
+        height: auto !important;
+        padding: 15px !important;
+    }
+    
+    .col-lg-4.col-md-6.pb-1 {
+        left: 0 !important;
+    }
+    
+    /* Video container */
+    div[style*="width: 92rem"] {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    video {
+        height: auto !important;
+        max-height: 30rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header section */
+    .row.align-items-center > div {
+        padding: 5px 15px;
+    }
+    
+    /* Product cards */
+    .card.product-item {
+        height: auto !important;
+        margin-bottom: 20px;
+    }
+    
+    .card-header.product-img img {
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    /* Subscribe section */
+    .container-fluid.bg-secondary .py-5 {
+        padding: 2rem 0 !important;
+    }
+    
+    /* Categories */
+    .cat-item .img-fluid {
+        height: auto !important;
+        width: 100% !important;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Header */
+    .text-decoration-none h1 {
+        font-size: 1.2rem;
+    }
+    
+    .input-group {
+        margin: 10px 0;
+    }
+    
+    /* User actions */
+    .col-lg-3.col-6.text-right {
+        justify-content: center !important;
+    }
+    
+    .btn-outline-secondary,
+    .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+    
+    /* Navigation */
+    .nav-item.nav-link {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+    
+    /* Categories */
+    .cat-item {
+        margin-bottom: 15px;
+    }
+    
+    /* Products */
+    .card-body {
+        padding: 10px !important;
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* Subscribe section */
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-group input,
+    .input-group-append {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Dropdown menu responsiveness */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        min-width: 100%;
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    
+    .dropdown-item {
+        padding: 8px 15px;
+        text-align: center;
+    }
+}
+
+/* Fix for sticky navigation on mobile */
+@media (max-width: 991px) {
+    .row.border-top.px-xl-5 {
+        position: static;
+        background: white;
+        padding: 10px 0;
+    }
+}
+      </style>
+  </head>
+  
+  <body>
+    <div class="container-fluid">
+        <!-- Main Header Row -->
+        <div class="row align-items-center py-3 px-xl-5">
+            <!-- Logo Section -->
+            <div class="col-auto">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold">
+                        <span class="text-primary font-weight-bold border px-3 mr-1">SC</span>SwitchCraft
+                    </h1>
+                </a>
+            </div>
+    
+            <!-- Desktop Search Bar - Hidden on Mobile -->
+            <div class="col d-none d-lg-block">
+                <form action="" method="GET" class="input-group">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Navigation Section -->
+            <div class="col-auto">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <!-- Mobile Search - Visible only on mobile -->
+                        <form action="" method="GET" class="input-group d-lg-none mb-3 mt-3">
+                            <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+    
+                        <div class="navbar-nav align-items-center">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/shop" class="nav-item nav-link">Shop</a>
+                            <div class="nav-item dropdown">
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <%= locals.user.name %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile">Profile</a>
+                                            <a class="dropdown-item" href="/cart">Cart</a>
+                                            <a class="dropdown-item" href="/resetPassword">Reset Password</a>
+                                            <a class="dropdown-item" href="/coupon">Coupons</a>
+                                            <a class="dropdown-item" href="/orders">Orders</a>
+                                            <a class="dropdown-item" href="/wallet">Wallet</a>
+                                            <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="btn btn-outline-secondary mr-2" style="color: brown;">Sign Up</a>
+                                    <a href="/login" class="btn btn-primary">Login</a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mb-5">
+            </nav>
+            <div style="width: 92rem; height: 560px;">
+              <video src="/video/video'.mp4"  autoplay muted loop style ="width: 100%; height: 40rem; object-fit: cover;"></video>
+          </div>
+    </div>
+      <!-- Navbar End -->
+ 
+
+    <!-- Categories Start -->
+    
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5 pb-3">
+            <div class="col-lg-4 col-md-6 pb-1">
+                <div class="cat-item d-flex flex-column border mb-4" style="padding: 20px; height: 20rem;">
+                    <p class="text-right">7 Products</p>
+                    <h5 class="font-weight-semi-bold m-0">EPOMARKER</h5>
+                    <a href="/shop" class="cat-img position-relative overflow-hidden mb-10" style="padding-bottom: 5rem;"  >
+                   <img class="img-fluid" src="/productImage/epoMarke.webp" alt="img" style="height: 160%; width: 60%;" >
+                    </a>
+                </div>
+            </div>
+           
+            <div class="col-lg-4 col-md-6 pb-1">
+                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px; height: 20rem;">
+                    <p class="text-right">3 Products</p>
+                    <h5 class="font-weight-semi-bold m-0">MACKEY</h5>
+                    <a href="/shop" class="cat-img position-relative overflow-hidden mb-3" style="padding-bottom: 5rem;" >
+                        <img class="img-fluid" src="/productImage/mackey.jpg" alt=""  style="height: 160%; width: 60%;" >
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 pb-1">
+                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px; height: 20rem;">
+                    <p class="text-right">5 Products</p>
+                    <h5 class="font-weight-semi-bold m-0">NUPHY</h5>
+                    <a href="/shop" class="cat-img position-relative overflow-hidden mb-3" style="padding-bottom: 5rem;">
+                        <img class="img-fluid" src="/productImage/nuphy.webp" alt="" style="height: 160%; width: 70%;">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 pb-1" style="left: 13rem;">
+                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px; height: 20rem;">
+                    <p class="text-right">8 Products</p>
+                    <h5 class="font-weight-semi-bold m-0">RK KEYBOARD</h5>
+                    <a href="/shop" class="cat-img position-relative overflow-hidden mb-3" style="padding-bottom: 5rem;">
+                        <img class="img-fluid" src="/productImage/rkKeyboard.webp" alt="" style="height: 160%; width: 70%;">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 pb-1" style="left: 15rem;">
+                <div class="cat-item d-flex flex-column border mb-4" style="padding: 30px; height: 20rem; ">
+                    <p class="text-right">4 Products</p>
+                    <h5 class="font-weight-semi-bold m-0">YUNZII</h5>
+                    <a href="/shop" class="cat-img position-relative overflow-hidden mb-3"  style="padding-bottom: 5rem;">
+                        <img class="img-fluid" src="/productImage/yunzii.webp" alt="" style="height: 160%; width: 70%;">
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    </a>
+    <!-- Categories End -->
+
+    <!-- Subscribe Start -->
+    <div class="container-fluid bg-secondary my-5">
+        <div class="row justify-content-md-center py-5 px-xl-5">
+            <div class="col-md-6 col-12 py-5">
+                <div class="text-center mb-2 pb-2">
+                    <h2 class="section-title px-5 mb-3"><span class="bg-secondary px-2">Stay Updated</span></h2>
+                    <p>Amet lorem at rebum amet dolores. Elitr lorem dolor sed amet diam labore at justo ipsum eirmod duo labore labore.</p>
+                </div>
+                <form action="">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-white p-4" placeholder="Email Goes Here">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary px-4">Subscribe</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Subscribe End -->
+
+
+    <!-- Products Start -->
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Just Arrived</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="card product-item border-0 mb-4" style="height: 23rem;">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" src="/productImage/gamin.webp" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">Gaming Keyboard</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="card product-item border-0 mb-4" style="height: 23rem;">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" src="/productImage/normal.webp" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">Normal Keyboard</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="card product-item border-0 mb-4" style="height: 23rem;">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" src="/productImage/mechanic.jpg" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">Mechanic Keyboard</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="card product-item border-0 mb-4" style="height: 23rem;">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" src="/productImage/wireless.webp" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h6 class="text-truncate mb-3">Wireless Keyboard</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                        <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Products End -->
+
+
+<%- include('../partials/user/footer') %>

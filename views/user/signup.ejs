@@ -1,0 +1,246 @@
+<style>
+    body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            background: linear-gradient(to bottom, #343333, #e0e0e0);
+            animation: bubbleAnimation 10s ease infinite; /* Animation for gradient */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .box {
+            width: 350px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #f0f0f0;
+            color: #000;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .input-group input:focus {
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group input:focus ~ .toggle-password {
+            transform: translateY(-5px);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #6a1b9a;
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background: #4a148c;
+            transform: scale(1.05);
+        }
+
+        .social-btn {
+            display: block;
+            background: #333;
+            margin-bottom: 10px;
+        }
+
+        .google-btn {
+            background: #db4437;
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #6a1b9a;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .bubble {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            animation: bubbleFloat 5s ease infinite;
+        }
+
+        @keyframes bubbleAnimation {
+            0% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        @keyframes bubbleFloat {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-10px);
+            }
+            40% {
+                transform: translateX(10px);
+            }
+            60% {
+                transform: translateX(-10px);
+            }
+            80% {
+                transform: translateX(10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+ 
+</style>
+<div class="container">
+    <div class="box signup">
+        <h2>Sign up</h2>
+        <form action="/signup" method="post">
+            <div class="input-group">
+                <input type="text" id="username" name="name" pattern=".*\S.*" placeholder="Username" >
+            </div>
+            <div class="input-group">
+                <input type="text" id="email" name="email" pattern=".*\S.*" placeholder="Email" >
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" pattern=".*\S.*" placeholder="Password" >
+                <span class="toggle-password" id="toggle-password-btn1">👁️</span>
+            </div>
+            <div class="input-group">
+                <input type="password" id="confirmPassword" name="confirmPassword" pattern=".*\S.*" placeholder="Confirm Password" >
+                <span class="toggle-password" id="toggle-password-btn2">👁️</span>
+            </div>
+            <button class="signup-btn" type="submit">Sign up</button>
+            <h4>
+                <% if (messages.error) { %>
+                    <div class="alert alert-danger" style="color: #db4437;">
+                        <%= messages.error %>
+                    </div>
+                <% } %>
+                <div id="errorMessage" style="color: #db4437;" class="error msg"></div>
+            </h4>
+        </form>
+        <p>Or Sign up with</p> <br>
+        <a href="/auth/google">
+            <button class="social-btn google-btn">Sign up with Google</button>
+        </a>
+    </div>
+</div>
+
+<script>
+
+      // Password toggle for the main password
+const passwordInput = document.getElementById('password');
+const toggleButton = document.getElementById('toggle-password-btn1');
+
+toggleButton.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    toggleButton.classList.toggle('active'); 
+    toggleButton.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+});
+
+
+const confirmPasswordInput = document.getElementById('confirmPassword');
+const conformToggleButton = document.getElementById('toggle-password-btn2');
+
+conformToggleButton.addEventListener('click', () => {
+    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    confirmPasswordInput.setAttribute('type', type);
+    conformToggleButton.classList.toggle('active'); 
+    conformToggleButton.textContent = type === 'password' ? '👁️' : '👁️‍🗨️'; 
+});
+
+                
+</script>

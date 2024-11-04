@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <link rel="stylesheet" href="/path/to/bootstrap.css"> <!-- Adjust path as necessary -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* Existing styles */
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #343a40;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+
+        .cancel-btn {
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .return-btn {
+            color: #fff;
+            background-color: #4635dc;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .view-btn {
+            color: #fff;
+            background-color: #186000;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
+        .cancel-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+            z-index: 1000;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .header {
+            position: relative;
+            z-index: 500;
+        }
+        #navbar-vertical {
+        transition: height 0.3s ease;
+        }
+        .collapse:not(.show) {
+            display: none;
+        }  
+        .dropdown {
+              position: relative;
+              display: inline-block;
+          }
+          .dropdown-content {
+              display:none;
+              position: absolute;
+              background-color: white;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+              z-index: 1000;
+              right: 0;
+          }
+  
+          .dropdown-content a {
+              color: black;
+              padding: 12px 16px ;
+              text-decoration: none;
+              display: block;
+              width: 100%;
+          }
+  
+          .dropdown-content a:hover{
+              background-color: #f1f1f1;
+  
+          }
+  
+          .dropdown:hover  .dropdown-content{
+              display: block;
+          }
+          .header {
+              position: relative;
+              z-index: 500;
+          }
+                .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff; 
+        }
+
+        .dropdown-menu {
+            min-width: 200px; 
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; 
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Main Header Row -->
+        <div class="row align-items-center py-3 px-xl-5">
+            <!-- Logo Section -->
+            <div class="col-auto">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold">
+                        <span class="text-primary font-weight-bold border px-3 mr-1">SC</span>SwitchCraft
+                    </h1>
+                </a>
+            </div>
+    
+            <!-- Desktop Search Bar - Hidden on Mobile -->
+            <div class="col d-none d-lg-block">
+                <form action="" method="GET" class="input-group">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Navigation Section -->
+            <div class="col-auto">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <!-- Mobile Search - Visible only on mobile -->
+                        <form action="" method="GET" class="input-group d-lg-none mb-3 mt-3">
+                            <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+    
+                        <div class="navbar-nav align-items-center">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/shop" class="nav-item nav-link">Shop</a>
+                            <div class="nav-item dropdown">
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <%= locals.user.name %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile">Profile</a>
+                                            <a class="dropdown-item" href="/cart">Cart</a>
+                                            <a class="dropdown-item" href="/resetPassword">Reset Password</a>
+                                            <a class="dropdown-item" href="/coupon">Coupons</a>
+                                            <a class="dropdown-item" href="/orders">Orders</a>
+                                            <a class="dropdown-item" href="/wallet">Wallet</a>
+                                            <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="btn btn-outline-secondary mr-2" style="color: brown;">Sign Up</a>
+                                    <a href="/login" class="btn btn-primary">Login</a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Main Content -->
+    <di<div class="container">
+        <!-- Table for larger screens -->
+        <div class="table-responsive d-none d-md-block" style="padding: 0px 100px;">
+            <h1 class="text-primary">Your Orders</h1>
+            <table id="salesTable" class="table table-striped">
+                <thead>
+                    <tr class="text-dark" style="font-size: larger;">
+                        <th>Order ID</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Invoice Date</th>
+                        <th>Payment Method</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (orders.length > 0) { %>
+                        <% orders.forEach(order => { %>
+                            <tr class="text-dark">
+                                <td><%= order.orderId %></td>
+                                <td>₹ <%= order.finalAmount.toFixed(2) %></td>
+                                <td>
+                                    <% if (order.paymentStatus === false) { %>
+                                        <span class="text-danger">Payment Failed</span>
+                                    <% } else { %>
+                                        <%= order.status %>
+                                    <% } %>
+                                </td>
+                                <td><%= new Date(order.createdOn).toLocaleDateString() %></td>
+                                <td><%= order.paymentMethod %></td>
+                                <td>
+                                    <a href="/orders/<%= order._id %>"><button class="btn btn-primary btn-sm">View</button></a>
+                                    <% if (order.paymentStatus === false) { %>
+                                        <button class="btn btn-warning btn-sm" onclick="retryPayment('<%= order._id %>')">Retry</button>
+                                    <% } else if (order.status === 'pending') { %>
+                                        <button class="btn btn-danger btn-sm" onclick="cancelOrder('<%= order._id %>')">Cancel</button>
+                                    <% } else if (order.status === 'Delivered') { %>
+                                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#returnModal" onclick="openReturnModal('<%= order._id %>')">Return</button>
+                                    <% } else if (order.status === 'cancelled') { %>
+                                        <button class="btn btn-secondary btn-sm" disabled>Cancelled</button>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Card format for mobile screens -->
+        <div class="d-md-none">
+            <% if (orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Order ID: <%= order.orderId %></h5>
+                            <p class="card-text"><strong>Total Price:</strong> ₹ <%= order.finalAmount.toFixed(2) %></p>
+                            <p class="card-text">
+                                <strong>Status:</strong> 
+                                <% if (order.paymentStatus === false) { %>
+                                    <span class="text-danger">Payment Failed</span>
+                                <% } else { %>
+                                    <%= order.status %>
+                                <% } %>
+                            </p>
+                            <p class="card-text"><strong>Invoice Date:</strong> <%= new Date(order.createdOn).toLocaleDateString() %></p>
+                            <p class="card-text"><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                            <div>
+                                <a href="/orders/<%= order._id %>" class="btn btn-primary btn-sm">View</a>
+                                <% if (order.paymentStatus === false) { %>
+                                    <button class="btn btn-warning btn-sm" onclick="retryPayment('<%= order._id %>')">Retry</button>
+                                <% } else if (order.status === 'pending') { %>
+                                    <button class="btn btn-danger btn-sm" onclick="cancelOrder('<%= order._id %>')">Cancel</button>
+                                <% } else if (order.status === 'Delivered') { %>
+                                    <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#returnModal" onclick="openReturnModal('<%= order._id %>')">Return</button>
+                                <% } else if (order.status === 'cancelled') { %>
+                                    <button class="btn btn-secondary btn-sm" disabled>Cancelled</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="text-center">No orders found.</div>
+            <% } %>
+        </div>
+    </div>
+    
+
+     <!-- THIS IS THE MODAL Return -->
+        <!-- Return Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="returnModalLabel">Return Request</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to submit a return request for this order?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitReturnRequest()">Return Request</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 pb-1">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mb-3">
+            <% if(currentPage > 1) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+
+            <% if(currentPage < totalPages) { %>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+  
+
+<div class="container-fluid bg-secondary text-dark mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+        <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <a href="" class="text-decoration-none">
+                <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">SC</span>SwitchCraft</h1>
+            </a>
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i> Malappuram, kerala, India</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>necheyanmidlaj@gmail.com</p>
+            <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+919895832213</p>
+        </div>
+        <div class="col-lg-8 col-md-12">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-dark mb-2" href="/shopDetails"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-dark mb-2" href="/detail"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                    <form action="">
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 py-4" placeholder="Your Name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                />
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+     
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="/path/to/bootstrap.bundle.js"></script>
+    <script src="/path/to/bootstrap.bundle.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+
+
+   / RETURN MODAL FUNCTION /
+   let currentOrderId;
+function openReturnModal(orderId) {
+    currentOrderId = orderId;
+}
+function submitReturnRequest() {
+    fetch(`/orders/${currentOrderId}/return`, { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'returned' })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Return request sent successfully!");
+            $('#returnModal').modal('hide'); 
+            location.reload();
+        } else {
+            alert("Failed to send return request.");
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+   / DATA TABLE   &&   FUNCTION CHANGE STATUS / 
+$(document).ready(function() {
+            $('#salesTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              pageLength: 10
+            });
+        });
+    function cancelOrder(orderId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once cancelled, you will not be able to recover this order!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willCancel) => {
+            if (willCancel) {
+                fetch(`/orders/cancel/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        swal({
+                            title: "Success!",
+                            text: "Your order has been cancelled.",
+                            icon: "success",
+                            button: "Back",
+                        }).then(() => {
+                            window.location.reload(); 
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: data.message || "Error canceling the order.",
+                            icon: "error",
+                            button: "Back",
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    swal({
+                        title: "Error!",
+                        text: "Server error while trying to cancel the order.",
+                        icon: "error",
+                        button: "Back",
+                    });
+                });
+            } else {
+                swal("Your order is safe!");
+            }
+        });
+    }
+
+
+
+
+    async function retryPayment(orderId) {
+    try {
+        const res = await fetch(`/retry-payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId }) 
+        });
+        const data = await res.json();
+        if (data.success) {
+            const options = {
+                key: data.razorpayKey, 
+                amount: data.amount,
+                currency: "INR",
+                order_id: data.orderId,
+                handler: async function (paymentResponse) {
+                        try {
+                            const verifyRes = await fetch('/verify-payment',{
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                                    razorpay_signature: paymentResponse.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.success) {
+                                window.location.href = "/order-success";
+                            } else {
+                                swal("Error", "Payment verification failed", "error");
+                                window.location.href = "/payment-failure"; 
+                            }
+                        } catch (error) {
+                            console.log("Error during payment verification:", error);
+                            swal("Error", "An unexpected error occurred during payment verification", "error");
+                            window.location.href = "/payment-failure";
+                        }
+                    },
+                    "modal": {
+                        "ondismiss": function () {
+                            window.location.href = "/payment-failure";
+                        }
+                    }
+            };
+            const rzp1 = new Razorpay(options);
+            rzp1.open();
+
+        } else {
+            alert(data.message); 
+        }
+    } catch (error) {
+        console.error("Error during retry:", error);
+        alert("Something went wrong while retrying payment.");
+    }
+}   
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>

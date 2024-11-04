@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Page</title>
+    
+    <style>
+           body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);  /* Shadow for depth */
+    transition: transform 0.3s ease;
+}
+
+/* Closed Sidebar (for toggle) */
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Toggle Button */
+.btn-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.btn-toggle:hover {
+    color: #ffcc00;
+}
+
+/* Sidebar Menu */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 20px;
+}
+
+/* Sidebar Menu Links */
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 5px;   /* Consistent rounded corners */
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #444;  /* Hover effect */
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    background-color: #fff;
+    position: relative;
+}
+
+.main-content h1 {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Add Button */
+.add-btn {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn:hover {
+    background-color: #fff; /* White background on hover */
+    color: #000; /* Black text on hover */
+    transform: scale(1.15);
+}
+
+/* Products Table Styles */
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 60px;
+}
+
+.products-table thead {
+    background-color: #333;
+    color: #fff;
+}
+
+.products-table th, .products-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.products-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* Button Styles */
+.edit-btn, .variant-btn, .status-btn, .action-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover, .variant-btn:hover, .status-btn:hover, .action-btn:hover {
+    background-color: #0056b3;
+}
+
+.action-btn {
+    background-color: #ffc107;
+}
+
+.action-btn:hover {
+    background-color: #e0a800;
+}
+
+.status-btn {
+    background-color: #28a745;
+}
+
+.status-btn:hover {
+    background-color: #218838;
+}
+
+/* Sidebar Hover Animation */
+.sidebar ul li a {
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar ul li a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.3s ease;
+    z-index: 0;
+}
+
+.sidebar ul li a:hover::before {
+    left: 0;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.save-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+}
+/* Style the modal container */
+#modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
+/* Style the modal content */
+.modal-content {
+  background-color: #f9f9f9;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/* Style the images */
+.modal-content img {
+  margin: 10px;
+  border: 1px solid #ddd;
+}
+.modal-content img {
+    max-width: 100%;
+    height: 30rem;
+    margin: 10px 0;
+}
+  
+    </style>
+
+    <!-- Load SweetAlert CSS and JS early in the head -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    
+    <div class="dashboard-container">
+        <%- include('../partials/admin/header') %>
+        <div class="main-content">
+            <h1>Products</h1>
+            <a href="/admin/addProduct">
+                <button class="add-btn">➕</button>   
+            </a>
+            <table id="productTable" class="products-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>quantity</th>
+                        <th>Offers</th>
+                        <th>price</th>
+                        <th>color</th>
+                        <th>Edit Image</th>
+                        <th>Edit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < productData.length; i++) { %>
+                    <tr>
+                        <td><%= productData[i].productName %></td>
+                        <td><%= productData[i].stock %></td>
+                        <td>
+                            <% if (productData[i].highestOffer > 0) { %>
+                                <span>Offer: <%= productData[i].highestOffer %>%</span><br>
+                            <% } %>
+                            <% if (productData[i].highestOffer <= 0) { %>
+                                <span> Offer :0%</span><br>
+                            <% } %>
+                        </td>
+                        <td><%= productData[i].price %></td>
+                        <td><%= productData[i].color %></td>
+                        <td>
+                            <a href="/admin/editImage/<%= productData[i]._id %>" style="text-decoration: none; color: white;">
+                                <button class="edit-btn">Edit Image</button>
+                            </a>
+                        </td>
+                        <td>
+                            <button class="edit-btn" onclick="openModal(
+                                '<%= productData[i]._id %>', 
+                                '<%= productData[i].productName %>', 
+                                '<%= productData[i].color %>', 
+                                '<%= productData[i].price %>', 
+                                '<%= productData[i].stock %>', 
+                                <%= JSON.stringify(productData[i].productImage) %>
+                            )">
+                                Edit
+                            </button>
+                        </tx`d>
+                     <!-- Your existing HTML structure remains the same -->
+            <td>
+                <button class="status-btn" onclick="toggleStatus('<%= productData[i]._id %>', <%= productData[i].isBlocked %>, this)">
+                    <span class="status <%= productData[i].isBlocked ? 'active' : 'inactive' %>">
+                        <%= productData[i].isBlocked ? 'Deactive' : 'Active' %>
+                    </span>
+                </button>
+            </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Modal for editing product -->
+    <div id="editProductModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Product</h2>
+            <form id="editProductForm" action="/admin/productEdit" method="post">
+                <input type="hidden" id="editProductId" name="id">
+            
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" name="productName" ><br><br>
+            
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="color" ><br><br>
+            
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" ><br><br>
+            
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" ><br><br>
+            
+                <button type="submit">Update Product</button>
+            </form>                   
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SweetAlert/1.1.3/sweetalert.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/SweetAlert/1.1.3/sweetalert.min.js"></script>
+  
+    <script>
+        $(document).ready(function() {
+            $('#productTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              pageLength: 10
+            });
+        });
+
+        function openModal(id, productName, color, price, stock, images) {
+            document.getElementById("editProductId").value = id;    
+            document.getElementById("productName").value = productName;
+            document.getElementById("color").value = color;
+            document.getElementById("price").value = price;
+            document.getElementById("stock").value = stock;
+            
+            document.getElementById("editProductModal").style.display = "block";
+        }
+
+        document.querySelector(".close").onclick = function() {
+            document.getElementById("editProductModal").style.display = "none";
+        };
+
+        function toggleStatus(ProductId, isBlocked, button) {
+    const actionText = isBlocked ? "deactivate" : "activate";
+    const confirmationText = `Are you sure you want to ${actionText} this product?`;
+
+    swal({
+        title: "Are you sure?",
+        text: confirmationText,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willChange) => {
+        if (willChange) {
+            fetch(`/admin/toggle-product-status/${ProductId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isBlocked: !isBlocked }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button text and style
+                    button.querySelector('.status').textContent = isBlocked ? 'Active' : 'Deactive';
+                    button.querySelector('.status').classList.toggle('active');
+                    button.querySelector('.status').classList.toggle('inactive');
+
+                    window.location.reload()
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "Error updating status.",
+                        icon: "error",
+                        button: "Back"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error updating status:", error);
+                swal({
+                    title: "Error",
+                    text: "An error occurred.",
+                    icon: "error",
+                    button: "Back"
+                });
+            });
+        }
+    });
+}
+
+
+
+
+  function getQueryParams(param) {
+    let urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Get the errors from query parameters
+  const errors = getQueryParams('errors');
+  const success = getQueryParams('success');
+  const error = getQueryParams('error');
+
+  // Display errors using Toastr
+  if (errors) {
+    const errorArray = JSON.parse(decodeURIComponent(errors));
+    errorArray.forEach(error => {
+      toastr.error(error);
+    });
+  }
+
+  // Display success message using Toastr
+  if (success) {
+    toastr.success(success);
+  }
+
+  // Display single error using Toastr
+  if (error) {
+    toastr.error(error);
+  }
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="/styles.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+    /* Common styles */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+    }
+    .sidebar {
+        width: 250px; /* Set a fixed width for sidebar */
+        background-color: #333;
+        color: #fff;
+        height: 100vh;
+        padding: 20px;
+    }
+
+    .dashboard {
+        display: flex;
+    }
+
+    .btn-toggle {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .btn-toggle:hover {
+        color: #ffcc00;
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+        margin-left: 250px; 
+    }
+
+    .page {
+        padding: 20px;
+    }
+
+    /* Table Styles */
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in;
+    }
+
+    .user-table thead {
+        background-color: #f4f4f4;
+    }
+
+    .user-table th, .user-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .user-table tr:hover {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+    .user-table tr {
+        height: 60px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .status.active {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .status.inactive {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input {
+        width: 300px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .action-button {
+        padding: 6px 12px;
+        margin-right: 5px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .block-button {
+        background-color: #dc3545;
+    }
+
+    .unblock-button {
+        background-color: #28a745;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+<body>
+ 
+    <div class="dashboard">
+        <%- include('../partials/admin/header') %>
+
+        <!-- Main content area -->
+        <main class="content">
+            <!-- Users Page -->
+            <div id="users" class="page">
+                <h1>Users</h1>
+                <!-- Search Bar -->
+
+                <table class="user-table" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Register Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < userData.length; i++) { %>
+                        
+                            <tr>
+                                <td><%= userData[i]._id %></td>
+                                <td><%= userData[i].name %></td> <!-- name -->
+                                <td><%= userData[i].email %></td> <!-- email -->
+                                <td><%= userData[i].createOn %></td> <!-- Added register date -->
+                                <td>
+                                    <% if (userData[i].isBlocked === false) { %>
+                                        <a href="/admin/blockCustomer?id=<%= userData[i]._id %>" class="text-white" style="text-decoration: none;">
+                                            <button class="btn btn-danger" style="width: 80px;">Block</button>
+                                        </a>
+                                    <% } else { %>
+                                        <a href="/admin/unblockCustomer?id=<%= userData[i]._id %>" class="text-white" style="text-decoration: none;">
+                                            <button class="btn btn-success" style="width: 80px;">Unblock</button>
+                                        </a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+                
+</body>
+<!-- Include jQuery (required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- Include DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    
+    $(document).ready(function() {
+            $('#userTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              pageLength: 7
+            });
+        });
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const blocked = urlParams.get('blocked');
+        if (blocked === 'true') {
+            swal({
+              title: "Success",
+              text: "User has been successfully blocked!",
+              icon: "success",
+              button: "OK",
+            });
+        } else if (blocked === 'false') {
+            swal({
+              title: "Error",
+              text: "An error occurred while blocking the user.",
+              icon: "error",
+              button: "OK",
+            });
+        }
+    };
+</script>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</html> 

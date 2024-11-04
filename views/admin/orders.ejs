@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <style>
+      body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.dashboard {
+    display: flex;
+}
+
+/* Toggle button */
+.btn-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.btn-toggle:hover {
+    color: #ffcc00;
+}
+
+/* Sidebar Menu */
+
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: #fff;
+            position: relative;
+        }
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+        }
+        .orders-table th, .orders-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .orders-table thead {
+            background-color: #333;
+            color: #fff;
+        }
+        .orders-table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+        .edit-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <div class="dashboard-container">
+        <%- include('../partials/admin/header') %>
+        <div class="main-content" >
+            <h1>Orders</h1>
+            <table id="ordersTable" class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Price</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Items</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (orders.length > 0) { %>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.orderId %></td>
+
+                                <% let totalPriceDisplay = order.totalPrice; %>
+            
+                                <% if (order.coupon.name) { %>
+                                    <% totalPriceDisplay = order.totalPrice - (order.totalPrice * order.coupon.offer / 100) + 50; %>
+                                <% } else { %>
+                                    <% let hasOffer = false; %>
+                                    <% order.orderedItem.forEach(item => { %>
+                                        <% if (item.productId && item.price !== item.productId.price) { %>
+                                            hasOffer = true;
+                                            totalPriceDisplay = order.finalAmount + 50;
+                                        <% } %>
+                                    <% }); %>
+                                <% } %>
+                                <td>₹ <%= totalPriceDisplay.toFixed(2) %></td>
+                                <td><%= order.userId.name %></td>
+                                <td>
+                                    <select onchange="handleStatusChange('<%= order._id %>', this.value)" 
+                                        <%= order.status === 'cancelled' || order.status === 'Delivered' ? 'disabled' : '' %>>
+                                        <% if (order.status === 'pending') { %>
+                                            <option selected>pending</option>
+                                            <option value="Delivered">Delivered</option>
+                                            <option value="cancelled">Cancelled</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="out for Delivery">out for Delivery</option>
+
+                                        <% } %>
+                                        <% if (order.status === 'cancelled' || order.status === 'Delivered') { %>
+                                            <option disabled selected><%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %></option>
+                                        <% } %>
+                                    </select>
+                                    
+                                    
+                                <td>
+                                    <ul>
+                                        <% order.orderedItem.forEach(item => { %>
+                                            <li><%= item.product.productName %></li>
+                                        <% }) %>
+                                    </ul>
+                                </td>
+                                <td><%= new Date(order.createdOn).toLocaleDateString() %></td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7" style="text-align:center;">No orders found.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+ 
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        
+        $(document).ready(function() {
+            $('#ordersTable').DataTable({
+              paging: true,
+              searching: true,
+              ordering: true,
+              pageLength: 7
+            });
+        });
+function handleStatusChange(orderId, newStatus) {
+    if (confirm(`Are you sure you want to change the order status to ${newStatus}?`)) {
+        fetch(`/admin/toggle-order-status/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                swal({
+              title: data.message,
+              text: "Order status updated successfully!",
+              icon: "success",
+              button: "back",
+              });
+                location.reload();
+            } else {
+                swal({
+              title: data.message,
+              text: data.message+"Error updating status",
+              icon: "error",
+              button: "back",
+              });
+            }
+        })
+        .catch(error => {
+            console.error('Error updating status:', error);
+            swal({
+              title: data.message,
+              text: "An error occurred.",
+              icon: "error",
+              button: "back",
+              });
+        });
+    } else {
+        location.reload();
+    }
+}
+    </script>
+
+</body>
+</html>

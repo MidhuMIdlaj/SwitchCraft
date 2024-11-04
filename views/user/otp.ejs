@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        /* Enhanced OTP Page Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #002D72, #00509E); /* Gradient background color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            backdrop-filter: blur(4px);
+        }
+
+        .otp-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 380px;
+            text-align: center;
+        }
+
+        .brand-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        .half-1 {
+            color: #FF6347;
+        }
+
+        .half-2 {
+            color: #4682B4;
+        }
+
+        .otp-box h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .otp-input {
+            width: 90%;
+            height: 50px;
+            text-align: center;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .otp-input:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .resend-btn {
+            background-color: #6c757d;
+        }
+
+        .resend-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .timer {
+            font-size: 1rem;
+            color: #FF6347;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <div class="brand-name">
+            <span class="half-1">Switch</span><span class="half-2">Cart</span>
+        </div>
+        <div class="otp-box">
+            <form id="otp-form">
+                <input type="text" maxlength="6" class="otp-input" name="otp" placeholder="Enter OTP"  />
+                <div id="timer" class="timer">Time remaining: 01:00</div> <!-- Timer Display -->
+                <div class="actions">       
+                    <button type="button" class="btn submit-btn" id="submit-otp">Submit</button>      
+                </div>
+                <h4 id="error-message" style="color: #db4437;"></h4>
+            </form>
+            <button type="button" id="resendOtpBtn" class="btn resend-btn" disabled>Resend OTP</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        let timeLeft = 20 
+        const timerElement = document.getElementById('timer');
+        const resendOtpBtn = document.getElementById('resendOtpBtn');
+
+        function startTimer() {
+            const countdown = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.textContent = 'OTP expired! Please resend.';
+                    resendOtpBtn.disabled = false; // Enable the "Resend OTP" button
+                } else {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerElement.textContent = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+            // Start the timer
+            startTimer();
+
+            // Handle OTP submission
+            $('#submit-otp').on('click', function () {
+                const otp = $('input[name="otp"]').val();
+
+                $.ajax({
+                    url: '/otp',
+                    method: 'POST',
+                    data: { otp: otp },
+                    success: function (response) {
+                        if (response.success) {
+                            toastr.success('OTP verified successfully!');
+                            window.location.href = response.redirectUrl; // Redirect to change password page
+                        } else {
+                            toastr.error(response.message || 'Invalid OTP');
+                        }
+                    },
+                    error: function () {
+                        toastr.error('An error occurred while submitting the OTP.');
+                    }
+                });
+            });
+
+            // Handle Resend OTP
+            $('#resendOtpBtn').on('click', function () {
+                $.ajax({
+                    url: '/otpr',
+                    method: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            toastr.success('OTP resent successfully!');
+                            timeLeft = 20; // Reset the timer
+                            resendOtpBtn.disabled = true; // Disable the "Resend OTP" button
+                            startTimer(); // Restart the timer
+                        } else {
+                            toastr.error(response.message || 'Failed to resend OTP');
+                        }
+                    },
+                    error: function () {
+                        toastr.error('An error occurred while resending the OTP.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+            z-index: 1000;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .header {
+            position: relative;
+            z-index: 500;
+        }
+        #navbar-vertical {
+        transition: height 0.3s ease;
+        }
+        .collapse:not(.show) {
+            display: none;
+        }  
+        .dropdown {
+              position: relative;
+              display: inline-block;
+          }
+          .dropdown-content {
+              display:none;
+              position: absolute;
+              background-color: white;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+              z-index: 1000;
+              right: 0;
+          }
+  
+          .dropdown-content a {
+              color: black;
+              padding: 12px 16px ;
+              text-decoration: none;
+              display: block;
+              width: 100%;
+          }
+  
+          .dropdown-content a:hover{
+              background-color: #f1f1f1;
+  
+          }
+  
+          .dropdown:hover  .dropdown-content{
+              display: block;
+          }
+          .header {
+              position: relative;
+              z-index: 500;
+          }
+                .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff; 
+        }
+
+        .dropdown-menu {
+            min-width: 200px; 
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; /* Background color on hover */
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px; /* Adjust spacing between buttons */
+        }
+
+
+  </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Main Header Row -->
+        <div class="row align-items-center py-3 px-xl-5">
+            <!-- Logo Section -->
+            <div class="col-auto">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold">
+                        <span class="text-primary font-weight-bold border px-3 mr-1">SC</span>SwitchCraft
+                    </h1>
+                </a>
+            </div>
+    
+            <!-- Desktop Search Bar - Hidden on Mobile -->
+            <div class="col d-none d-lg-block">
+                <form action="" method="GET" class="input-group">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Navigation Section -->
+            <div class="col-auto">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <!-- Mobile Search - Visible only on mobile -->
+                        <form action="" method="GET" class="input-group d-lg-none mb-3 mt-3">
+                            <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+    
+                        <div class="navbar-nav align-items-center">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/shop" class="nav-item nav-link">Shop</a>
+                            <div class="nav-item dropdown">
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <%= locals.user.name %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile">Profile</a>
+                                            <a class="dropdown-item" href="/cart">Cart</a>
+                                            <a class="dropdown-item" href="/resetPassword">Reset Password</a>
+                                            <a class="dropdown-item" href="/coupon">Coupons</a>
+                                            <a class="dropdown-item" href="/orders">Orders</a>
+                                            <a class="dropdown-item" href="/wallet">Wallet</a>
+                                            <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="btn btn-outline-secondary mr-2" style="color: brown;">Sign Up</a>
+                                    <a href="/login" class="btn btn-primary">Login</a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">Order Details</h2>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Order Information -->
+                    <h5 class="mb-3">Order ID: <%= order.orderId %></h5>
+                    <p><strong>Order Date:</strong> <%= new Date(order.createdOn).toLocaleDateString() %></p>
+                    <p><strong>Status:</strong> <span class="badge bg-info"><%= order.status %></span></p>
+                    <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                    <p><strong>total Price:</strong> ₹<%= order.totalPrice.toFixed(2) %></p>
+                    <p><strong>final Price:</strong> ₹<%= order.finalAmount.toFixed(2) %></p>
+
+                 
+
+                    <!-- Ordered Items -->
+                    <h5 class="mt-4">Items Ordered</h5>
+                    <div class="container">
+
+                        <!-- Table for larger screens -->
+                        <div class="table-responsive d-none d-md-block mt-2">
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% order.orderedItem.forEach(function(item) { %>
+                                        <tr>
+                                            <td><%= item.product.productName %></td>
+                                            <td><%= item.quantity %></td>
+                                            <td>₹<%= item.price.toFixed(2) %></td>
+                                            <td>₹<%= (item.price * item.quantity).toFixed(2) %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                        <!-- Card format for mobile screens -->
+                        <div class="d-md-none">
+                            <% order.orderedItem.forEach(function(item) { %>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>Product:</strong> <%= item.product.productName %></h5>
+                                        <p class="card-text"><strong>Quantity:</strong> <%= item.quantity %></p>
+                                        <p class="card-text"><strong>Price:</strong> ₹<%= item.price.toFixed(2) %></p>
+                                        <p class="card-text"><strong>Subtotal:</strong> ₹<%= (item.price * item.quantity).toFixed(2) %></p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    
+                    </div>
+                    
+
+                    <% if(order.status === 'Delivered') {%>
+                    <button class="btn btn-primary mt-3" onclick="generateInvoicePDF('<%= order.id %>')">
+                        <i class="fas fa-download"></i> Download Invoice
+                    </button>    
+                    <%}%>                                
+                </div>
+            </div>
+
+            <!-- Address Information -->
+            <div class="card mt-5 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4>Delivery Address</h4>
+                </div>
+                <div class="card-body">
+                    <% if (order.address) { %>
+                        <p><strong>Full Name:</strong> <%= order.address.firstName %> <%= order.address.lastName || '' %></p>
+                        <p><strong>Phone Number:</strong> <%= order.address.phoneNumber %></p>
+                        <p><strong>Address Type:</strong> <%= order.addressType || 'N/A' %></p>
+                        <p><strong>House Number:</strong> <%= order.address.houseNumber %></p>
+                        <p><strong>Area:</strong> <%= order.address.area %></p>
+                        <p><strong>Landmark:</strong> <%= order.address.landmark %></p>
+                        <p><strong>District:</strong> <%= order.address.district %></p>
+                        <p><strong>PinCode:</strong> <%= order.address.pinCode %></p>
+                    <% } else { %>
+                        <p>No address information available.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+   <!-- Footer Start -->
+   <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+        <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+            <a href="" class="text-decoration-none">
+                <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">SC</span>SwitchCraft</h1>
+            </a>
+            <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i> Malappuram, kerala, India</p>
+            <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>necheyanmidlaj@gmail.com</p>
+            <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+919895832213</p>
+        </div>
+        <div class="col-lg-8 col-md-12">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-dark mb-2" href="/shopDetails"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                        <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                        <a class="text-dark mb-2" href="/detail"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                        <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                        <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                    <form action="">
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 py-4" placeholder="Your Name" />                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                             />
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+ <!-- PDFKit CDN -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfkit/0.12.1/pdfkit.min.js"></script>
+ <!-- Blob Stream Library -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/blob-stream/0.1.3/blob-stream.min.js"></script>
+
+  <script>
+    function generateInvoicePDF(orderId) {
+      fetch(`/generateInvoicePDF/${orderId}`)
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Failed to generate PDF');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `invoice_${orderId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => console.error(error));
+     }
+</script>
+</body>
+</html>

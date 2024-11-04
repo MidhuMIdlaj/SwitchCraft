@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+      <!-- <title>EShopper - Bootstrap Shop Template</title> -->
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta content="Free HTML Templates" name="keywords">
+      <meta content="Free HTML Templates" name="description">
+      <link href="img/favicon.ico" rel="icon">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="style.css">
+    <style>
+        .wallet-balance {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .transaction-table {
+            margin-top: 30px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table td {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        vertical-align: middle; /* Center-align the content vertically */
+    }
+
+    /* Custom styles for product details */
+    .cart-items .quantity-display, .total-price, .remove-btn {
+        margin-top: 10px; /* Add some margin to push elements down */
+    }
+
+    /* Button spacing for quantity buttons */
+    .quantity-btn {
+        margin: 0 5px;
+    }
+
+    /* Image and product name alignment */
+    .cart-items img {
+        margin-bottom: 15px;
+    }
+
+    .cart-items p {
+        margin-top: 10px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .cart-items td {
+            display: block;
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .cart-items img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .cart-items .quantity-btn {
+            margin: 5px 0;
+        }
+
+        .total-price, .remove-btn {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .cart-items thead {
+            display: none; 
+        }
+        
+        .cart-items tbody tr {
+            display: block;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd; 
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cart-items img {
+            max-width: 80px;
+        }
+
+        .cart-items .quantity-btn {
+            font-size: 12px; 
+        }
+
+        .total-price, .remove-btn {
+            margin-top: 15px;
+        }
+    }
+    .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+            z-index: 1000;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .header {
+            position: relative;
+            z-index: 500;
+        }
+        #navbar-vertical {
+        transition: height 0.3s ease;
+        }
+        .collapse:not(.show) {
+            display: none;
+        }  
+        .dropdown {
+              position: relative;
+              display: inline-block;
+          }
+          .dropdown-content {
+              display:none;
+              position: absolute;
+              background-color: white;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+              z-index: 1000;
+              right: 0;
+          }
+  
+          .dropdown-content a {
+              color: black;
+              padding: 12px 16px ;
+              text-decoration: none;
+              display: block;
+              width: 100%;
+          }
+  
+          .dropdown-content a:hover{
+              background-color: #f1f1f1;
+  
+          }
+  
+          .dropdown:hover  .dropdown-content{
+              display: block;
+          }
+          .header {
+              position: relative;
+              z-index: 500;
+          }
+                .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff; 
+        }
+
+        .dropdown-menu {
+            min-width: 200px; 
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; 
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Main Header Row -->
+        <div class="row align-items-center py-3 px-xl-5">
+            <!-- Logo Section -->
+            <div class="col-auto">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold">
+                        <span class="text-primary font-weight-bold border px-3 mr-1">SC</span>SwitchCraft
+                    </h1>
+                </a>
+            </div>
+    
+            <!-- Desktop Search Bar - Hidden on Mobile -->
+            <div class="col d-none d-lg-block">
+                <form action="/shop" method="GET" class="input-group">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Navigation Section -->
+            <div class="col-auto">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <!-- Mobile Search - Visible only on mobile -->
+                        <form action="" method="GET" class="input-group d-lg-none mb-3 mt-3">
+                            <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+    
+                        <div class="navbar-nav align-items-center">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/shop" class="nav-item nav-link">Shop</a>
+                            <div class="nav-item dropdown">
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <%= locals.user.name %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile">Profile</a>
+                                            <a class="dropdown-item" href="/cart">Cart</a>
+                                            <a class="dropdown-item" href="/resetPassword">Reset Password</a>
+                                            <a class="dropdown-item" href="/coupon">Coupons</a>
+                                            <a class="dropdown-item" href="/orders">Orders</a>
+                                            <a class="dropdown-item" href="/wallet">Wallet</a>
+                                            <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="btn btn-outline-secondary mr-2" style="color: brown;">Sign Up</a>
+                                    <a href="/login" class="btn btn-primary">Login</a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="transaction-table">
+        <div class="container">
+            <!-- Table for larger screens -->
+            <div class="table-responsive d-none d-md-block" style="padding: 0px 20px;">
+                <h4 class="mt-5">Transaction History</h4>
+                <table class="table table-bordered table-hover mt-3"  >
+                    <thead class="table-light">
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% transactions.forEach(transaction => { %>
+                            <tr>
+                                <td><%= transaction._id %></td>
+                                <td><%= transaction.type %></td>
+                                <td>₹<%= transaction.amount.toFixed(2) %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        
+            <!-- Card for mobile screens -->
+            <div class="d-block d-md-none">
+                <div class="row">
+                    <% transactions.forEach(transaction => { %>
+                    <div class="col-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Transaction ID: <%= transaction._id %></h5>
+                                <p class="card-text">Description: <%= transaction.type %></p>
+                                <p class="card-text">Amount: ₹<%= transaction.amount.toFixed(2) %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="col-12 pb-1">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mb-3">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                <% } %>
+    
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+    
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+    
+
+    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <a href="" class="text-decoration-none">
+                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">SC</span>SwitchCraft</h1>
+                </a>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i> Malappuram, kerala, India</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>necheyanmidlaj@gmail.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+919895832213</p>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-dark mb-2" href="/shopDetails"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                            <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-dark mb-2" href="/detail"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                            <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                        <form action="">
+                            <div class="form-group">
+                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" ="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                    />
+                            </div>
+                            <div>
+                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <style>
+  body {
+    display: flex;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+}
+
+.content {
+    margin-left: 30px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-left: 312px;
+    flex-grow: 1;
+}
+
+.content h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #34495e;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+form div {
+    flex: 1;
+    min-width: 220px;
+}
+
+form label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+    color: #34495e;
+}
+
+form input[type="date"],
+form select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    font-size: 15px;
+    color: #495057;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+form input[type="date"]:focus,
+form select:focus {
+    border-color: #2980b9;
+}
+
+form button {
+    padding: 12px 25px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #21618c;
+}
+
+/* Sales report table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table thead {
+    background-color: #2980b9;
+    color: white;
+}
+
+table th, table td {
+    padding: 14px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+table td {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+table tbody tr td[colspan="5"] {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+/* Download buttons */
+div button {
+    padding: 12px 25px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background-color 0.3s ease;
+}
+
+div button:hover {
+    background-color: #1e8449;
+}
+
+div button:last-child {
+    background-color: #f39c12;
+}
+
+div button:last-child:hover {
+    background-color: #e67e22;
+}
+.chart-container {
+    width: 100%; 
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+#orderChart {
+    width: 100% !important; 
+    height: auto !important; 
+}
+
+
+/* this is the css of the buttons  */
+.button-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.styled-button {
+    width: 22rem;
+    height: 5rem;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #007bff;
+    padding: 0rem 1rem;
+    box-sizing: border-box; 
+    transition: all 0.3s ease;
+}
+
+
+/* Button-specific gradients */
+.button1 {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+
+.button2 {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+.button3 {
+    background: linear-gradient(135deg, #f39c12, #e74c3c);
+}
+
+
+.styled-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.button1:hover {
+    background: linear-gradient(135deg, #16a085, #a2beb8);
+}
+.button2:hover {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+}
+
+.button3:hover {
+    background: linear-gradient(135deg, #e74c3c, #f39c12);
+}
+
+
+</style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <%- include('../partials/admin/header') %>
+        <div class="content">
+            <h1>Dashboard</h1>
+            <div class="button-container">
+                <button class="styled-button button1"> <h5>Overall Sales Count : <%= count%></h5></button>
+                <button class="styled-button button2"><h5>Overall Order Amount: <%= totalAmount%></h5></button>
+                <button class="styled-button button3"><h5>Overall Discount: <%= discount[0].totalDiscount%></h5></button>
+            </div>
+                
+        <div class="chart-container">
+            <canvas id="orderChart" width="300" height="150"></canvas><div class="chart-container">
+        </div>
+
+        <button class="styled-button button3" onclick="showTopSellingProducts()">
+            <h6>Best-Selling Product: <%= top10Products[0]?.productName %></h6>
+          </button>
+          <div id="topSellingList" class="collapse mt-2">
+            <ul class="list-group">
+              <% top10Products.forEach(product => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <strong><%= product.productName %></strong>
+                  <span class="badge bg-primary rounded-pill">Sold: <%= product.totalQuantity %></span>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+
+          <button class="styled-button button1" onclick="toggleTopBrands()">
+            <h6>Top 10 Best-Selling Brands</h6>
+          </button>
+          <div id="topBrandList" class="collapse mt-2">
+            <ul class="list-group">
+              <% top10BrandList.forEach(brand => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <strong><%= brand.name %></strong>
+                  <span class="badge bg-primary rounded-pill">Sold: <%= brand.totalQuantity %></span>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+    
+            <h1>Sales Report</h1>
+            <form method="GET" action="/admin/dashboard">
+                <div>
+                    <label for="filterType">Filter By:</label>
+                    <select id="filterType" name="filterType" onchange="toggleDateFields()">
+                        <option value="daily" <%= filterType === 'daily' ? 'selected' : '' %>>Daily</option>
+                        <option value="weekly" <%= filterType === 'weekly' ? 'selected' : '' %>>Weekly</option>
+                        <option value="monthly" <%= filterType === 'monthly' ? 'selected' : '' %>>Monthly</option>
+                        <option value="yearly" <%= filterType === 'yearly' ? 'selected' : '' %>>Yearly</option>
+                        <option value="custom" <%= filterType === 'custom' ? 'selected' : '' %>>Custom Date</option>
+                    </select>
+                </div>
+                <div id="dateFilters" style="display: none;">
+                    <div>
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" value="<%= startDate %>">
+                    </div>
+                    <div>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" value="<%= endDate %>">
+                    </div>
+                </div>
+                <div>
+                    <label for="status">Order Status:</label>
+                    <select id="status" name="status">
+                        <option value="">All</option>
+                        <% ['pending', 'processing', 'shipped', 'Delivered', 'cancelled', 'return', 'request', 'returned'].forEach(status => { %>
+                            <option value="<%= status %>" <%= status === selectedStatus ? 'selected' : '' %>><%= status %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <button type="submit">Filter</button>
+            </form>
+            <table id="salesTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Final Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (orders.length > 0) { %>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.orderId %></td>
+                                <td><%= order.userId.name %></td>
+                                <td>₹ <%= order.finalAmount.toFixed(2) %></td>
+                                <td><%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %></td>
+                                <td><%= new Date(order.createdOn).toLocaleDateString() %></td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5">No orders found for the selected filters.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <div>
+                <button id="downloadPdf">Download PDF</button>
+                <button id="downloadExcel">Download Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#salesTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                pageLength: 10
+            });
+    
+            // Get the data for the chart
+            const labels = <%- chartLabels %>;
+            const data = <%- chartValues %>;
+    
+            const ctx = document.getElementById('orderChart').getContext('2d');
+            const orderChart = new Chart(ctx, {
+                type: 'bar', // You can change this to 'line', 'pie', etc.
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Order Count',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Order Count'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    
+        function toggleDateFields() {
+            const filterType = document.getElementById('filterType').value;
+            const dateFilters = document.getElementById('dateFilters');
+            
+            if (filterType === 'custom') {
+                dateFilters.style.display = 'block';
+            } else {
+                dateFilters.style.display = 'none';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            toggleDateFields();
+        });
+        document.getElementById('downloadPdf').addEventListener('click', function() {
+            window.location.href = '/admin/sales-report/download/pdf';
+        });
+    
+        document.getElementById('downloadExcel').addEventListener('click', function() {
+            window.location.href = '/admin/sales-report/download/excel';
+        });
+
+
+
+        / for button /
+            function showTopSellingProducts() {
+            const list = document.getElementById('topSellingList');
+            list.classList.toggle('show');
+            }
+            function toggleTopBrands() {
+            const list = document.getElementById('topBrandList');
+            list.classList.toggle('show');
+            }
+    </script>
+    
+       
+</body>
+</html>

@@ -1,0 +1,205 @@
+<style>
+  .image-upload-form {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.image-upload-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.image-box {
+  flex: 1;
+  margin: 0 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #fff;
+  transition: box-shadow 0.3s;
+}
+
+.image-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.image-preview {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.change-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.change-btn:hover {
+  background-color: #0056b3;
+}
+
+.small-save-btn {
+  display: block;
+  margin: 20px auto;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.small-save-btn:hover {
+  background-color: #218838;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.modal-content {
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  background-color: white;
+  max-width: 500px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover, .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+
+</style>
+<!-- Modal -->
+<form action="/admin/editImage/<%= productId %>" method="POST" enctype="multipart/form-data" class="image-upload-form">
+  <div class="image-upload-container">
+    <div class="image-box">
+      <img id="imgView1" src="<%= productImage1 %>" alt="Product Image 1" class="image-preview">
+      <input type="file" id="image1" name="image1" accept="image/*" onchange="openCropper(event, 1)" style="display: none;">
+       <button type="button" class="change-btn" onclick="document.getElementById('image1').click();">Change Image</button>
+    </div>
+    <div class="image-box">
+      <img id="imgView2" src="<%= productImage2 %>" alt="Product Image 2" class="image-preview">
+      <input type="file" id="image2" name="image2" accept="image/*" onchange="openCropper(event, 2)" style="display: none;">
+      <button type="button" class="change-btn" onclick="document.getElementById('image2').click();">Change Image</button>
+    </div>
+    <div class="image-box">
+      <img id="imgView3" src="<%= productImage3 %>" alt="Product Image 3" class="image-preview">
+      <input type="file" id="image3" name="image3" accept="image/*" onchange="openCropper(event, 3)" style="display: none;">
+      <button type="button" class="change-btn" onclick="document.getElementById('image3').click();">Change Image</button>
+    </div>
+  </div>
+  <button type="submit" class="small-save-btn">Save Changes</button>
+</form>
+
+<!-- Modal for Image Cropping -->
+<div id="cropperModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img id="imageToCrop" style="max-width: 100%;" alt="Image to Crop">
+    <button id="cropButton">Crop Image</button>
+  </div>
+</div>
+
+
+
+<link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet">
+<!-- Cropper.js JavaScript -->
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+<script src="https://unpkg.com/cropperjs@1.5.12/dist/cropper.min.js"></script>
+
+<script>
+  let cropper;
+  let croppedCanvas;
+  const modal = document.getElementById('cropperModal');
+  const imageToCrop = document.getElementById('imageToCrop');
+  const closeModal = document.getElementsByClassName('close')[0];
+
+  function openCropper(event, index) {
+  imgIndex = index;
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      imageToCrop.src = e.target.result;
+      modal.style.display = "block";
+      
+      // Destroy old cropper instance if exists
+      if (cropper) cropper.destroy();
+      cropper = new Cropper(imageToCrop, { aspectRatio: 1, viewMode: 2 });
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+
+document.getElementById('cropButton').addEventListener('click', function() {
+  if (cropper) {
+    croppedCanvas = cropper.getCroppedCanvas();
+    if (!croppedCanvas) {
+      swal({
+              title: `${errorText}`,
+              text: "Cropping failed. Please try again.'",
+              icon: "error",
+              button: "back",
+              });
+      return;
+    }
+
+    const croppedImage = croppedCanvas.toDataURL();
+    const previewImage = document.getElementById(`imgView${imgIndex}`);
+    previewImage.src = croppedImage;
+
+    modal.style.display = "none";
+
+    croppedCanvas.toBlob(function(blob) {
+      const fileInput = document.getElementById(`image${imgIndex}`);
+      const dataTransfer = new DataTransfer();
+      const croppedFile = new File([blob], `croppedImage${imgIndex}.png`, { type: 'image/png' });
+      dataTransfer.items.add(croppedFile);
+      fileInput.files = dataTransfer.files;
+    });
+  } else {
+    swal({
+              title: `${errorText}`,
+              text: "Cropper is not initialized.",
+              icon: "success",
+              button: "back",
+              });
+  }
+});
+
+</script>

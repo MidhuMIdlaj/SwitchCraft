@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta content="Free HTML Templates" name="keywords">
+      <meta content="Free HTML Templates" name="description">
+      <link href="img/favicon.ico" rel="icon">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+      <link rel="stylesheet" href="style.css">
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        a{
+            color: #D19C97;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+            animation: slideIn 0.5s ease;
+        }
+
+        .input-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease;
+            opacity: 0;
+            animation-delay: 0.5s;
+            animation-fill-mode: forwards;
+        }
+
+        label {
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 30rem;
+            max-width: 700px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            border-color: #ff7e5f;
+            outline: none;
+        }
+
+        .submit-btn {
+            background-color: #1d1c46;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            box-shadow: 0 4px 6px rgba(75, 57, 57, 0.1);
+        }
+
+        .submit-btn:hover {
+            background-color: #4453af;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 5000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #ff7e5f;
+        }
+
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .modal .input-group {
+            margin-bottom: 20px;
+        }
+
+        .modal .input-group label {
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="email"],
+        .modal input[type="tel"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: border-color 0.3s ease;
+        }
+
+        .modal input[type="text"]:focus,
+        .modal input[type="email"]:focus,
+        .modal input[type="tel"]:focus {
+            border-color: #ff7e5f;
+            outline: none;
+        }
+
+        .modal button.submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #1d1c46;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button.submit-btn:hover {
+            background-color: #4453af;
+        }
+
+        .error {
+            color: red !important;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .box-dive {
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            perspective: 1000px;
+            perspective-origin: 50% 50%;
+            margin: 20px auto;
+        }
+
+        .box-content {
+            position: relative;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #545151;
+            transition: transform 0.5s;
+        }
+
+        .box-dive:hover .box-content {
+            transform: translateY(20px) scale(0.9);
+            box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"],
+            .submit-btn {
+                width: 100%;
+            }
+
+            .box-dive {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 150px;
+                padding: 15px;
+            }
+
+            .main-content {
+                padding: 10px;
+                margin: 5px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .sidebar h2 {
+                font-size: 20px;
+            }
+
+            .sidebar ul li a {
+                font-size: 14px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"] {
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+        }
+
+        .address-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        .address-box {
+            width: calc(33.33% - 20px);
+            height: 300px;
+            background-color: #f3eded;
+            margin: 10px;
+            border-radius: 4px;
+            border: 1px solid black;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .address-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .address-box p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .address-box {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .address-box {
+                width: 100%;
+            }
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 8px 15px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .edit-btn:hover,
+        .delete-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .dropdown {
+              position: relative !important;
+              display: inline-block !important;
+          }
+          .dropdown-content {
+              display:none !important;
+              position: absolute !important;
+              background-color: white !important;
+              min-width: 160px !important;
+              box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha) !important;
+              z-index: 1000 !important;
+              right: 0 !important;
+          }
+  
+          .dropdown-content a {
+              color: black;
+              padding: 12px 16px ;
+              text-decoration: none;
+              display: block;
+              width: 100%;
+          }
+  
+          .dropdown-content a:hover{
+              background-color: #f1f1f1;
+  
+          }
+  
+          .dropdown:hover  .dropdown-content{
+              display: block;
+          }
+          .header {
+              position: relative;
+              z-index: 500;
+          }
+             .nav-link {
+            color: #333;
+            font-weight: bold !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; /* Background color on hover */
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px; /* Adjust spacing between buttons */
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(red, green, blue, alpha);
+            z-index: 1000;
+            right: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .header {
+            position: relative;
+            z-index: 500;
+        }
+        #navbar-vertical {
+        transition: height 0.3s ease;
+        }
+        .collapse:not(.show) {
+            display: none;
+        }  
+        .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff; 
+        }
+
+        .dropdown-menu {
+            min-width: 200px; 
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-outline-secondary {
+            margin-right: 10px;
+        }
+
+
+
+        .product-item {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .product-img {
+        position: relative;
+        overflow: hidden;
+    }
+    .product-img .product-image {
+        transition: transform 0.3s ease;
+    }
+    .product-img:hover .product-image {
+        transform: scale(1.1);
+    }
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .product-img:hover .product-overlay {
+        opacity: 1;
+    }
+    .product-overlay .btn {
+        transform: translateY(20px);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .product-img:hover .product-overlay .btn {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Main Header Row -->
+        <div class="row align-items-center py-3 px-xl-5">
+            <!-- Logo Section -->
+            <div class="col-auto">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold">
+                        <span class="text-primary font-weight-bold border px-3 mr-1">SC</span>SwitchCraft
+                    </h1>
+                </a>
+            </div>
+    
+            <!-- Desktop Search Bar - Hidden on Mobile -->
+            <div class="col d-none d-lg-block">
+                <form action="/shop" method="GET" class="input-group">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Navigation Section -->
+            <div class="col-auto">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <!-- Mobile Search - Visible only on mobile -->
+                        <form action="" method="GET" class="input-group d-lg-none mb-3 mt-3">
+                            <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form>
+    
+                        <div class="navbar-nav align-items-center">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/shop" class="nav-item nav-link">Shop</a>
+                            <div class="nav-item dropdown">
+                                <% if (locals.user) { %>
+                                    <div class="dropdown">
+                                        <a href="" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <%= locals.user.name %>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                            <a class="dropdown-item" href="/profile">Profile</a>
+                                            <a class="dropdown-item" href="/cart">Cart</a>
+                                            <a class="dropdown-item" href="/resetPassword">Reset Password</a>
+                                            <a class="dropdown-item" href="/coupon">Coupons</a>
+                                            <a class="dropdown-item" href="/orders">Orders</a>
+                                            <a class="dropdown-item" href="/wallet">Wallet</a>
+                                            <a class="dropdown-item" href="/wishlist">Wishlist</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <a href="/signup" class="btn btn-outline-secondary mr-2" style="color: brown;">Sign Up</a>
+                                    <a href="/login" class="btn btn-primary">Login</a>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+
+        <h1>Profile Information</h1>
+        <form id="profileForm" class="input-form">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <div class="form-group text-start">
+                    <label for="productName">Name</label>
+                    <input type="text" id="productName" class="form-control" value="<%= user.name %>"  disabled>
+                </div>
+                <div class="form-group text-start">
+                    <label for="productEmail">Email</label>
+                    <input type="email" id="productEmail" class="form-control" value="<%= user.email %>"  disabled>
+                </div>
+                <div class="form-group text-start">
+                    <label for="productMobile">Mobile</label>
+                    <input type="tel" id="productMobile" class="form-control" value="<%= user.phone%>"  disabled>
+                </div>
+                <button type="button" class="btn btn-primary" id="openModal">Update Profile</button>
+            </div>
+        </form>
+
+        <div class="address-section">
+            <h3>Addresses</h3>
+            <a href="/address">
+                <button type="button" class="submit-btn" id="addNewAddressBtn">Add New Address</button>
+            </a>
+            <div id="addressList" class="address-list d-flex flex-wrap justify-content-between">
+                <% if (addresses.length> 0) { %>
+                    <% addresses.forEach(function(address) { %>
+                        <div class="address-box">
+                            <p id="address-type"><strong>Address Type:</strong>
+                                <%= address.addressType %>
+                            </p>
+                            <p id="address-name"><strong>Name:</strong>
+                                <%= address.firstName %>
+                                    <%= address.lastName %>
+                            </p>
+                            <p><strong>House Number:</strong>
+                                <%= address.houseNumber %>
+                            </p>
+                            <p><strong>Area:</strong>
+                                <%= address.area %>
+                            </p>
+                            <p><strong>Landmark:</strong>
+                                <%= address.landmark %>
+                            </p>
+                            <p><strong>District:</strong>
+                                <%= address.district %>
+                            </p>
+                            <p><strong>Pin Code:</strong>
+                                <%= address.pinCode %>
+                            </p>
+                            <p><strong>Phone Number:</strong>
+                                <%= address.phoneNumber %>
+                            </p>
+
+                            <!-- Edit and Delete buttons -->
+                       <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#editAddressModal"
+                        data-id="<%= address._id %>" data-first-name="<%= address.firstName %>"
+                        data-last-name="<%= address.lastName %>" data-house-number="<%= address.houseNumber %>"
+                        data-area="<%= address.area %>" data-landmark="<%= address.landmark %>"
+                        data-district="<%= address.district %>" data-pin-code="<%= address.pinCode %>"
+                        data-phone-number="<%= address.phoneNumber %>">Edit</button>
+
+                                            
+
+                            <button type="button" class="delete-btn" data-id="<%= address._id %>">Delete</button>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p>No addresses found. Please add an address.</p>
+                                <% } %>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Structure for update profile -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Profile Information</h2>
+            <form id="modalProfileForm" action="/profile" method="post">
+                <div class="input-group">
+                    <label for="modalName">Name:</label>
+                    <input type="text" id="modalName" name="name" pattern=".*\S.*" >
+                    <div id="modalName-error" class="error"></div>
+                </div>
+                <div class="input-group">
+                    <label for="modalEmail">Email:</label>
+                    <input type="email" id="modalEmail" name="email"  disabled>
+                    <div id="modalEmail-error" class="error"></div>
+                </div>
+                <div class="input-group">
+                    <label for="modalMobile">Mobile:</label>
+                    <input type="tel" id="modalMobile" name="phone" pattern=".*\S.*" >
+                    <div id="modalMobile-error" class="error"></div>
+                </div>
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    <!-- Bootstrap Modal for Editing Address -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAddressForm" action="/updateAddress" method="POST">
+                        <input type="hidden" name="addressId" id="addressId" pattern=".*\S.*">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" pattern=".*\S.*" name="firstName"
+                                >
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" pattern=".*\S.*" name="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="houseNumber">House Number</label>
+                            <input type="text" class="form-control" id="houseNumber" pattern=".*\S.*" name="houseNumber"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="area">Area</label>
+                            <input type="text" class="form-control" id="area" pattern=".*\S.*" name="area" >
+                        </div>
+                        <div class="form-group">
+                            <label for="landmark">Landmark</label>
+                            <input type="text" class="form-control" id="landmark" pattern=".*\S.*" name="landmark"
+                                >
+                        </div>
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" class="form-control" id="district" pattern=".*\S.*" name="district"
+                                >
+                        </div>
+                        <div class="form-group">
+                            <label for="pinCode">Pin Code</label>
+                            <input type="text" class="form-control" id="pinCode" pattern=".*\S.*" name="pinCode"
+                                >
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber" pattern=".*\S.*" name="phoneNumber"
+                                >
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
+        <div class="row px-xl-5 pt-5">
+            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                <a href="" class="text-decoration-none">
+                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">SC</span>SwitchCraft</h1>
+                </a>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i> Malappuram, kerala, India</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>necheyanmidlaj@gmail.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+919895832213</p>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-dark mb-2" href="/shopDetails"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                            <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-dark mb-2" href="/shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
+                            <a class="text-dark mb-2" href="/detail"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
+                            <a class="text-dark mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="/checkout"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5">
+                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                        <form action="">
+                            <div class="form-group">
+                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" />
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                />
+                            </div>
+                            <div>
+                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
+
+
+    <script>
+        // Open and close modal logic
+        const openModalButton = document.getElementById('openModal');
+        const modal = document.getElementById('profileModal');
+        const closeModalButton = document.querySelector('.close');
+        const nameField = document.getElementById('productName');
+        const emailField = document.getElementById('productEmail');
+        const mobileField = document.getElementById('productMobile');
+
+        openModalButton.onclick = function () {
+            document.getElementById('modalName').value = nameField.value;
+            document.getElementById('modalEmail').value = emailField.value;
+            document.getElementById('modalMobile').value = mobileField.value;
+            modal.style.display = 'flex';
+        };
+
+        closeModalButton.onclick = function () {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+
+        };
+
+        // Form validation for update profile//
+        const modalForm = document.getElementById('modalProfileForm');
+        const modalName = document.getElementById('modalName');
+        const modalEmail = document.getElementById('modalEmail');
+        const modalMobile = document.getElementById('modalMobile');
+
+        $('#modalProfileForm').submit(function (e) {
+    e.preventDefault(); 
+
+    let isValid = true;
+
+    $('#modalName-error').text('');
+    $('#modalEmail-error').text('');
+    $('#modalMobile-error').text('');
+
+    // Validate Name (non-empty)
+    if ($('#modalName').val().trim() === '') {
+        $('#modalName-error').text('Name is required.');
+        isValid = false;
+    }
+
+    // Validate Email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test($('#modalEmail').val())) {
+        $('#modalEmail-error').text('Please enter a valid email address.');
+        isValid = false;
+    }
+
+    // Validate Mobile (must be 10 digits)
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test($('#modalMobile').val())) {
+        $('#modalMobile-error').text('Please enter a valid 10-digit mobile number.');
+        isValid = false;
+    }
+
+    if (!isValid) {
+        return;
+    }
+    const profileData = {
+        name: $('#modalName').val(),
+        email: $('#modalEmail').val(),
+        phone: $('#modalMobile').val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/profile',
+        data: JSON.stringify(profileData),
+        contentType: 'application/json',
+        success: function (response) {
+            if (response.success) {
+                toastr.success(response.message, 'Success');
+                location.reload();  // Reload the page on success
+            } else {
+                toastr.error(response.message, 'Error');
+            }
+        },
+        error: function (xhr) {
+            const response = JSON.parse(xhr.responseText);
+            toastr.error(response.message || 'Something went wrong.', 'Error');
+        }
+    });
+});
+
+
+
+
+                // address //
+            $(document).ready(function () {
+                $('.edit-btn').on('click', function () {
+                    var addressId = $(this).data('id');
+                    var firstName = $(this).data('first-name');
+                    var lastName = $(this).data('last-name');
+                    var houseNumber = $(this).data('house-number');
+                    var area = $(this).data('area');
+                    var landmark = $(this).data('landmark');
+                    var district = $(this).data('district');
+                    var pinCode = $(this).data('pin-code');
+                    var phoneNumber = $(this).data('phone-number');
+
+                    // Populate the modal //
+                    $('#addressId').val(addressId);
+                    $('#firstName').val(firstName);
+                    $('#lastName').val(lastName);
+                    $('#houseNumber').val(houseNumber);
+                    $('#area').val(area);
+                    $('#landmark').val(landmark);
+                    $('#district').val(district);
+                    $('#pinCode').val(pinCode);
+                    $('#phoneNumber').val(phoneNumber);
+                });
+
+                $('#editAddressForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    var addressId = $('#addressId').val();
+                    var firstName = $('#firstName').val();
+                    var lastName = $('#lastName').val();
+                    var houseNumber = $('#houseNumber').val();
+                    var area = $('#area').val();
+                    var landmark = $('#landmark').val();
+                    var district = $('#district').val();
+                    var pinCode = $('#pinCode').val();
+                    var phoneNumber = $('#phoneNumber').val();
+                    var data = {
+                        addressId: addressId,
+                        firstName: firstName,
+                        lastName: lastName,
+                        houseNumber: houseNumber,
+                        area: area,
+                        landmark: landmark,
+                        district: district,
+                        pinCode: pinCode,
+                        phoneNumber: phoneNumber
+                    };
+                    fetch('/updateAddress', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                        
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result) {
+                                toastr.success(result.message);
+                                setTimeout(function () {
+                                    window.location.href = '/profile';
+                                }, 1500);
+                            } else {
+
+                                toastr.error('Error updating address. Please try again.');
+                            }
+                        })
+                        .catch(error => {
+
+
+                            toastr.error('An unexpected error occurred.');
+                            console.error('Error:', error);
+                        });
+                });
+            });
+
+
+
+
+
+            / delete  address/
+            $(document).ready(function () {
+                $('.delete-btn').on('click', function () {
+                    var addressId = $(this).data('id');
+
+                    if (confirm('Are you sure you want to delete this address?')) {
+                        fetch(`/deleteAddress/${addressId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.success) {
+                                    toastr.success(result.message);
+                                    setTimeout(function () {
+                                        window.location.href = '/profile';
+                                    }, 1500);
+                                } else {
+
+                                    toastr.error(result.message || 'Error deleting address.');
+                                }
+                            })
+                            .catch(error => {
+                                toastr.error('An unexpected error occurred.');
+                                console.error('Error:', error);
+                            })
+                    }
+                });
+            });
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
