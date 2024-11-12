@@ -34,7 +34,6 @@ const addWishlist = async (req, res) => {
         if(req.session.userData){
             const userId = req.session.userData._id;
             const {productId} = req.body
-            console.log('dfa', productId)
 
             const product = await Product.findById(productId)
 
@@ -73,7 +72,6 @@ const addWishlist = async (req, res) => {
 }
 
 const removeWishlist = async (req, res) => {
-    console.log()
     try {
         const {productId} = req.params;
         const userId = req.session.userData._id;

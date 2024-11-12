@@ -18,8 +18,8 @@ router.get('/logout',adminAuthController.logout)
 
 // user management router  //
 router.get('/users',customerController.customerLoad)
-router.get('/blockCustomer',adminAuth, customerController.customerBlock )
-router.get('/unblockCustomer',adminAuth, customerController.customerUnBlock )
+router.post('/toggle-customer-status/:userId', customerController.toggleCustomerStatus);
+
 
 // category management router  //
 router.get('/category',adminAuth,  categoryController.categoryLoad)

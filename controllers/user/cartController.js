@@ -95,11 +95,11 @@ const addToCart = async (req, res) => {
       if (existingItem.quantity < stock) {
         existingItem.quantity += 1;
         existingItem.totalPrice = existingItem.price * existingItem.quantity;
-      } else {
-        req.flash("error", "Cannot add more than available stock.");
-        return res.redirect(`/shopDetails/${existingItem.productId}`);      
+      }else {
+        req.session.errorMessage = "Cannot add more than available stock.";
+        return res.redirect(`/shopDetails/${productId}`);
       }
-    } else {
+    }else {
       if (stock > 0) {
         cart.items.push({
           productId: productId,
@@ -108,10 +108,11 @@ const addToCart = async (req, res) => {
           totalPrice: price,
         });
       } else {
-        req.flash("error", "item outOf stock");
-        return res.redirect(`/shopDetails/${existingItem.productId}`);      
+        req.session.errorMessage = "Item is out of stock.";
+        return res.redirect(`/shopDetails/${productId}`);
       }
     }
+
 
     cart.calculateTotalPrice();
     req.session.cart = cart;

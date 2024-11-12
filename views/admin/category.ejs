@@ -349,7 +349,7 @@
                         class="status <%= types[i].isListed ? 'active' : 'inactive' %>" 
                         onclick="toggleStatus('<%= types[i]._id %>', <%= types[i].isListed %>)">
                         <%= types[i].isListed ? 'Active' : 'Deactive' %>
-                    </span>
+                    </span> 
                     </td>
                     <td><button class="edit-btn" onclick="openEditModal('<%= types[i]._id %>', '<%= types[i].name %>')">Edit</button></td>
                 </tr>
@@ -415,7 +415,6 @@ $(document).ready(function() {
     const addTypeBtn = document.getElementById("addTypeBtn");
     const closeBtn = document.querySelector(".close");
     const saveBtn = document.getElementById("saveBtn");
-    // Function to open modal and set entry type
     function openModal(type) {
         document.getElementById('entryType').value = type;
         addModal.style.display = "block";
@@ -441,9 +440,10 @@ $(document).ready(function() {
 
 
 // Handle form submission
-      saveBtn.onclick = function () {
-      const name = document.getElementById('name').value;
-      const type = document.getElementById('entryType').value;
+saveBtn.onclick = function () {
+    const name = document.getElementById('name').value;
+    const type = document.getElementById('entryType').value;
+
     fetch('/admin/add-entry', {
         method: 'POST',
         headers: {
@@ -456,6 +456,12 @@ $(document).ready(function() {
     })
     .then(response => {
         if (!response.ok) {
+            swal({
+                title: "Error",
+                text: "Network response was not okay. Please try again later.",
+                icon: "error",
+                button: "OK"
+            });
             throw new Error('Network response was not ok');
         }
         return response.json();
@@ -463,21 +469,21 @@ $(document).ready(function() {
     .then(data => {
         addModal.style.display = "none";
         swal({
-              title: `${errorText}`,
-              text: "Category add success",
-              icon: "success",
-              button: "back",
-              });
-        location.reload()
+            title: "Success",
+            text: "Category added successfully",
+            icon: "success",
+            button: "Back"
+        });
+        window.location.reload(); 
     })
     .catch(error => {
         console.error('Error:', error);
         swal({
-              title: `${errorText}`,
-              text: "Category already exist",
-              icon: "success",
-              button: "back",
-              });
+            title: "Error",
+            text: "Category already exists or there was an issue adding the category",
+            icon: "error", 
+            button: "Back"
+        });
     });
 };
 
@@ -494,7 +500,6 @@ $(document).ready(function() {
         dangerMode: true,
     }).then((willChange) => {
         if (willChange) {
-            // Send an AJAX request
             fetch(`/admin/toggle-category-status/${categoryId}`, {
                 method: 'POST',
                 headers: {
@@ -505,7 +510,7 @@ $(document).ready(function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    location.reload();
+                   window.location.reload();
                 } else {
                     swal({
                         title: "Error",

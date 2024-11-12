@@ -28,18 +28,22 @@ const Coupon = require('../../models/couponSchema')
 
 const addCoupon = async (req, res) => {
     try {
-        const { name, OfferPrice, minimumPrice, maximumPrice, expireOn } = req.body;
+        const { OfferPrice, minimumPrice,  expireOn } = req.body;
         let errors = {};
-        
-        if (!name) {
-            errors.name = "Coupon Code is required.";
+        const generateCode = () => {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                result += characters.charAt(randomIndex);
+            }
+            return result;
         }
+
+        const name  =  generateCode()
         if (OfferPrice < 1 || OfferPrice > 100) {
             errors.OfferPrice = "Offer must be between 1% and 100%.";
-        }
-        if (parseInt(minimumPrice) > parseInt(maximumPrice)) {
-            errors.minimumPrice = "Min Amount should not be greater than Max Amount.";
-        }
+        }   
         const today = new Date();
         const expireDate = new Date(expireOn);
         if (expireDate <= today) {
@@ -53,7 +57,6 @@ const addCoupon = async (req, res) => {
             name,
             OfferPrice,
             minimumPrice,
-            maximumPrice,
             expireOn: expireDate
         });
         await newCoupon.save();

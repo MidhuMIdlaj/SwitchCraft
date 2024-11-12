@@ -10,14 +10,74 @@
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <style>
-  body {
-    display: flex;
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f0f4f8;
+
+             /* Sidebar */
+.sidebar {
+    width: 230px;
+    background-color: #34495e;
+    color: #fff;
+    height: 100vh;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: fixed; /* Fixed sidebar position */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #ecf0f1;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a i {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #2c3e50;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Sidebar closed state (optional toggle feature) */
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+/* Adjusting main content when sidebar is open */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* When sidebar is closed */
+.sidebar.closed + .main-content {
+    margin-left: 0;
+}
+/* side bar end  */
 
 .content {
     margin-left: 30px;
@@ -183,8 +243,6 @@ div button:last-child:hover {
     transition: all 0.3s ease;
 }
 
-
-/* Button-specific gradients */
 .button1 {
     background: linear-gradient(135deg, #1abc9c, #16a085);
 }
@@ -218,8 +276,27 @@ div button:last-child:hover {
 </style>
 </head>
 <body>
+
+
+
+     <!-- side bar -->
+
+     <aside class="sidebar">
+        <ul>
+            <li><a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="/admin/orders"><i class="fas fa-receipt"></i> Orders</a></li>
+            <li><a href="/admin/users"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="/admin/category"><i class="fas fa-th"></i> Category</a></li>
+            <li><a href="/admin/product"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="/admin/coupon"><i class="fas fa-ticket-alt"></i> Coupon</a></li>
+            <li><a href="/admin/offers"><i class="fas fa-tag"></i> Offers</a></li>
+            <li><a href="javascript:void(0);" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      
+        </ul>
+    </aside>
+
+
     <div class="dashboard-container">
-        <%- include('../partials/admin/header') %>
         <div class="content">
             <h1>Dashboard</h1>
             <div class="button-container">
@@ -331,21 +408,24 @@ div button:last-child:hover {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#salesTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: true,
-                pageLength: 10
-            });
-    
-            // Get the data for the chart
+        const orders = <%- JSON.stringify(orders) %>;
+      $(document).ready(function() {
+        if (orders && orders.length > 0) {
+    const table = $('#salesTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        pageLength: 10
+    });
+}   
+
+            
             const labels = <%- chartLabels %>;
             const data = <%- chartValues %>;
-    
+            
             const ctx = document.getElementById('orderChart').getContext('2d');
             const orderChart = new Chart(ctx, {
-                type: 'bar', // You can change this to 'line', 'pie', etc.
+                type: 'bar', 
                 data: {
                     labels: labels,
                     datasets: [{
@@ -411,5 +491,28 @@ div button:last-child:hover {
     </script>
     
        
+
+    <!-- to logout  -->
+    <script>
+        function confirmLogout() {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to log out?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        dangerMode: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If the user confirms logout, redirect to logout route
+            window.location.href = "/admin/logout";
+        } else {
+            Swal.fire("Cancelled", "You are still logged in.", "info");
+        }
+    });
+}
+
+               </script>
 </body>
 </html>

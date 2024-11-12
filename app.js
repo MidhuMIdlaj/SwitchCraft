@@ -15,7 +15,7 @@ const Razorpay = require('razorpay');
  DB()
 
 app.use(session({
-  secret: 'your-secret-key', // Replace with your own secret key
+  secret: 'your-secret-key', 
   resave: false,
   saveUninitialized: true,
 }));

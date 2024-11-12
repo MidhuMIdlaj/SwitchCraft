@@ -4,11 +4,19 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet" />
         <script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+
+
+       <!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
         <style>
           /* Sidebar */
 .sidebar {
-    width: 230px;
+    width: 180px;
+    left: 0px;
+    top: 0px;
     background-color: #34495e;
     color: #fff;
     height: 100vh;
@@ -68,9 +76,7 @@
 
         </style>
     </head>
-    <body>
-        <!-- <div class="dashboard-container"> -->
-            <!-- Sidebar -->
+    <body>  
             <aside class="sidebar">
                 <ul>
                     <li><a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -80,9 +86,30 @@
                     <li><a href="/admin/product"><i class="fas fa-box"></i> Products</a></li>
                     <li><a href="/admin/coupon"><i class="fas fa-ticket-alt"></i> Coupon</a></li>
                     <li><a href="/admin/offers"><i class="fas fa-tag"></i> Offers</a></li>
-                    <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>      
+                    <li><a href="javascript:void(0);" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
                 </ul>
             </aside>
-    
-        <!-- </div> -->
+
+<script>
+
+         function confirmLogout() {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to log out?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        dangerMode: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If the user confirms logout, redirect to logout route
+            window.location.href = "/admin/logout";
+        } else {
+            Swal.fire("Cancelled", "You are still logged in.", "info");
+        }
+    });
+}
+ </script>
 

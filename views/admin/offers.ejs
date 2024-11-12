@@ -9,107 +9,155 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .dashboard-container {
-            display: flex; /* Ensures sidebar and main content are in a row */
-        }
-        .sidebar {
-            width: 280px;
-            background-color: #2c3e50;
+     
+     .sidebar {
+            width: 230px;
+            background-color: #34495e;
             color: #fff;
-            height: 100vh; /* Full height of the viewport */
+            height: 100vh;
             padding: 20px;
+            position: fixed; /* Fixed sidebar position */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
+
         .sidebar ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
+            margin: 0;
         }
+
         .sidebar ul li {
             margin: 20px 0;
         }
+
         .sidebar ul li a {
-            color: #fff;
             text-decoration: none;
+            color: #ecf0f1;
+            font-size: 16px;
             display: flex;
             align-items: center;
+            padding: 12px;
+            border-radius: 6px;
             transition: background-color 0.3s ease;
-            padding: 10px;
-            border-radius: 4px;
         }
+
+        .sidebar ul li a i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
         .sidebar ul li a:hover {
-            background-color: #444;
+            background-color: #2c3e50;
         }
+
         .main-content {
-            flex: 1; 
+            margin-left: 250px;
             padding: 20px;
-            background-color: #fff; 
+            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            margin-left: 20px; 
+            display: flex;
+            gap: 3rem;
         }
+
         .offers-container {
             display: flex;
             justify-content: space-between;
+            width: 100%;
         }
-        .brands-box, .products-box {
-            height: 40rem;
+
+        .brands-box,
+        .products-box {
             width: 48%;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            background-color: white; 
+            background-color: white;
+            overflow-y: auto;
+            height: 40rem;
         }
+
         h2 {
             text-align: center;
             color: #333;
         }
+
         .offer-item {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
             border-bottom: 1px solid #ddd;
         }
+
         .offer-item:last-child {
             border-bottom: none;
         }
+
         .offer-actions button {
             margin: 0 5px;
             padding: 5px 10px;
             cursor: pointer;
         }
+
         .add-offer {
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
         }
+
         .remove-offer {
             background-color: #dc3545;
             color: white;
             border: none;
             border-radius: 5px;
         }
+
         .offer-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
 
-.offer-table th, .offer-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
+        .offer-table th,
+        .offer-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-.offer-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
+        .offer-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .modal-body input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .modal-body button {
+            width: 30%; /* Button width matches the container */
+            padding: 12px; /* Increased padding for better spacing */
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 16px; /* Adjust the font size */
+            cursor: pointer; /* Makes the button clickable */
+        }
 
     </style>
 </head>
@@ -125,7 +173,7 @@
                     <li><a href="/admin/product"><i class="fas fa-box"></i> Products</a></li>
                     <li><a href="/admin/coupon"><i class="fas fa-ticket-alt"></i> Coupon</a></li>
                     <li><a href="/admin/offers"><i class="fas fa-tag"></i> Offers</a></li>
-                    <li><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>  
+                    <li><a href="javascript:void(0);" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </aside>
         <div class="main-content" style="display: flex; gap: 5rem;">
@@ -228,6 +276,13 @@
         </div>
     </div>
 
+    <!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
     <script>
         function openModal(type) {
             const modalContent = document.getElementById('modal-content');
@@ -300,19 +355,19 @@
 
 
 
-
         function addOffer(type, id) {
     const percentage = document.getElementById(`offer-${id}`).value;
     if (percentage < 1 || percentage > 100) {
-        alert('Please enter a valid offer percentage between 1 and 100.');
+        toastr.error('Please enter a valid offer percentage between 1 and 100.');
         return;
     }
+
     fetch(`/admin/offers/${type}/${id}`, {
-        method: 'POST', 
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ percentage }), 
+        body: JSON.stringify({ percentage }),
     })
     .then(response => {
         if (!response.ok) {
@@ -321,14 +376,16 @@
         return response.json();
     })
     .then(data => {
-        closeModal('offerPercentageModal')
-        alert('Offer added successfully!')
-        window.location.reload();  
+        closeModal('offerPercentageModal');
+        toastr.success('Offer added successfully!');
+        window.location.reload();
     })
     .catch(error => {
         console.error('Error adding offer:', error);
+        toastr.error('An error occurred while adding the offer.');
     });
 }
+
 data.forEach(item => {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'offer-item';
@@ -365,6 +422,32 @@ function removeOffer(id, type) {
         });
     }
 }
+
+
+
+//    to logout
+
+function confirmLogout() {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to log out?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Logout',
+        cancelButtonText: 'Cancel',
+        dangerMode: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If the user confirms logout, redirect to logout route
+            window.location.href = "/admin/logout";
+        } else {
+            // If the user cancels, show a cancellation message
+            Swal.fire("Cancelled", "You are still logged in.", "info");
+        }
+    });
+}
+
+
 
     </script>
 </body>

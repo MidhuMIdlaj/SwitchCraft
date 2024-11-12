@@ -5,6 +5,7 @@ const Order = require("../../models/orderSchema");
 const Product = require("../../models/ProductScheema");
 const Coupon = require("../../models/couponSchema");
 const Razorpay = require("razorpay");
+const mongoose = require('mongoose')
 
 
 const loadCheckOut = async (req, res) => {
@@ -113,6 +114,8 @@ const postCheckOutAddress = async (req, res) => {
   }
 };
 
+
+  
 const applyCoupon = async (req, res) => {
   try {
     const { couponCode } = req.body;
@@ -124,6 +127,7 @@ const applyCoupon = async (req, res) => {
     if (!coupon) {
       return res.json({ success: false, message: "Invalid coupon." });
     }
+   
     const today = new Date();
     if (coupon.expireOn && coupon.expireOn < today) {
       return res.json({ success: false, message: "Coupon expired." });
@@ -140,10 +144,14 @@ const applyCoupon = async (req, res) => {
       const itemPrice =  item.offerPrice > 0 ? item.offerPrice : item.productId.price;
       subtotal += itemPrice * item.quantity;
     });
+    if (coupon.minimumPrice > subtotal ) {
+      return res.json({ success: false, message: "minimum price require !!!!!!!!!!!." });
+    }
     let discount = 0;
     if (coupon.OfferPrice > 0) {
       discount = (subtotal * coupon.OfferPrice) / 100;
     }
+  
     const discountedSubtotal = Math.max(subtotal - discount, 0);
     const shipping = 50;
     const finalPrice = discountedSubtotal + shipping;
@@ -163,24 +171,26 @@ const razorpayInstance = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET 
 });
 
-
 const placeOrder = async (req, res) => {
   try {
       const { selectedAddressId, paymentMethod, couponCode, retryOrderId } = req.body;
       const userId = req.session.userData._id;
+
       const address = await Address.findOne(
         { "address._id": selectedAddressId },
         { address: 1 }
-       );
+      );
 
-          const selectedAddress = address.address.find(addr => addr._id.toString() === selectedAddressId);
-      
+      const selectedAddress = address.address.find(addr => addr._id.toString() === selectedAddressId);
+
       let cart = await Cart.findOne({ userId }).populate("items.productId");
       if (!cart) {
           return res.status(400).json({ success: false, message: "Cart not found" });
       } 
+
       let finalPrice = cart.totalPrice + 50;
       let discount = 0;
+
       if (couponCode) {
           const coupon = await Coupon.findOne({ name: couponCode.toUpperCase() });
           if (!coupon) {
@@ -192,50 +202,51 @@ const placeOrder = async (req, res) => {
           if (cart.totalPrice < coupon.minimumPrice || cart.totalPrice > coupon.maximumPrice) {
               return res.status(400).json({ success: false, message: "Cart total does not meet coupon criteria." });
           }
-          discount = (cart.totalPrice * coupon.OfferPrice) / 100 
-          finalPrice = finalPrice - discount ;
+          discount = (cart.totalPrice * coupon.OfferPrice) / 100;
+          finalPrice -= discount;
       }
 
       const orderedItems = cart.items.map((item) => ({
           product: item.productId._id,
           quantity: item.quantity,
-          price: item.offerPrice ? item.offerPrice :  item.price,
+          price: item.offerPrice ? item.offerPrice : item.price,
       }));
 
-      if(paymentMethod == "COD" ){
-      if(finalPrice > 1000){ 
-        return res.status(400).json({ success: false, message: "Cash on Delivery only for amount below 1000"});
+      // COD restriction
+      if(paymentMethod === "COD" && finalPrice > 1000) {
+          return res.status(400).json({ success: false, message: "Cash on Delivery only for amount below 1000" });
       }
-    }
-      let order;
-      // if (retryOrderId) {
-      //     order = await Order.findByIdAndUpdate(retryOrderId, {
-      //         userId,
-      //         orderedItem: orderedItems,
-      //         totalPrice: cart.totalPrice,
-      //         discount,
-      //         finalAmount: finalPrice,
-      //         address: selectedAddressId,
-      //         status: "pending",
-      //         paymentMethod,
-      //         coupon: couponCode ? { name: couponCode, offer: discount } : null,
-      //     }, { new: true });
-      // } else {
 
-          const newOrder = new Order({
-              userId,
-              orderedItem: orderedItems,
-              totalPrice: cart.totalPrice,
-              discount,
-              finalAmount: finalPrice,
-              address: selectedAddress,
-              status: "pending",
-              paymentMethod,
-              coupon: couponCode ? { name: couponCode, offer: discount } : null,
-        })
-          order = await newOrder.save();
-  
-           req.session.orderId = order._id
+      if (paymentMethod === "wallet") {
+          const user = await User.findById(userId);
+          if (user.wallet < finalPrice) {
+              return res.status(400).json({ success: false, message: "Insufficient wallet balance" });
+          }
+          
+          user.wallet -= finalPrice;
+          user.transaction.push({
+              type: 'debit',
+              amount: finalPrice,
+              createdOn: new Date()
+          });
+          await user.save();
+      }
+
+      // Create new order
+      const newOrder = new Order({
+          userId,
+          orderedItem: orderedItems,
+          totalPrice: cart.totalPrice,
+          discount,
+          finalAmount: finalPrice,
+          address: selectedAddress,
+          status: "pending",
+          paymentMethod,
+          coupon: couponCode ? { name: couponCode, offer: discount } : null,
+      });
+
+      const order = await newOrder.save();
+      req.session.orderId = order._id;
 
       for (const item of orderedItems) {
           const product = await Product.findById(item.product);
@@ -248,7 +259,7 @@ const placeOrder = async (req, res) => {
           product.stock -= item.quantity;
           await product.save();
       }
-      
+
       await Cart.deleteOne({ userId });
 
       if (couponCode) {
@@ -286,9 +297,10 @@ const placeOrder = async (req, res) => {
       }
   } catch (error) {
       console.error("Order submission error:", error);
-      return res.status(500).json({ success: false, message: "Server error  " });
+      return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 
 

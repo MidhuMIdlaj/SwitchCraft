@@ -10,347 +10,152 @@
 </head>
 </head>
 <style>
-    /* Common styles */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-    }
-
-    .dashboard {
-        display: flex;
-    }
-
+    
     .sidebar {
-        width: 230rem;
-         background-color: #2c3e50;
-        color: #fff;
-        height: 100vh;
-        padding: 20px;
-        transition: transform 0.3s ease;
-        z-index: 1;
-    }
-
-    .sidebar.closed {
-        transform: translateX(-100%);
-    }
-
-    .sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .sidebar-header h2 {
-        margin: 0;
-        font-size: 1.5rem;
-    }
-
-    .btn-toggle {
-        background: none;
-        border: none;
-        color: #fff;
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }
-
-    .btn-toggle:hover {
-        color: #ffcc00;
-    }
-
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .sidebar ul li {
-        margin: 20px 0;
-    }
-
-    .sidebar ul li a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        transition: background-color 0.3s ease;
-        padding: 10px;
-        border-radius: 4px;
-    }
-
-    .sidebar ul li a i {
-        margin-right: 10px;
-    }
-
-    .sidebar ul li a:hover {
-        background-color: #444;
-    }
-
-    .content {
-        flex: 1;
-        padding: 20px;
-    }
-
-    .page {
-        position: absolute;
-        left: 250px;
-        padding: 20px;
-    }
-
-    /* Table Styles */
-    .user-table {
-        width: 170%;
-        border-collapse: collapse;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 1s ease-in;
-    }
-
-    .user-table thead {
-        background-color: #f4f4f4;
-    }
-
-    .user-table th, .user-table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .user-table tr:hover {
-        background-color: #f1f1f1;
-        transition: background-color 0.3s ease;
-    }
-
-    .user-table tr {
-        height: 60px;
-    }
-
-    .status {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .status.active {
-        background-color: #28a745;
-        color: #fff;
-    }
-
-    .status.inactive {
-        background-color: #dc3545;
-        color: #fff;
-    }
-
-    .search-bar {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-    }
-
-    .search-bar input {
-        width: 300px;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .action-button {
-        padding: 6px 12px;
-        margin-right: 5px;
-        border: none;
-        border-radius: 4px;
-        color: #fff;
-        cursor: pointer;
-        font-size: 0.9rem;
-    }
-
-    .block-button {
-        background-color: #dc3545;
-    }
-
-    .unblock-button {
-        background-color: #28a745;
-    }
-    .add-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px; 
-    padding: 10px 20px;
-    font-size: 16px; 
-    cursor: pointer;
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center;
-    text-align: center; 
-    transition: background-color 0.3s ease; 
-}
-
-.add-btn:hover {
-    background-color: #218838;
-}
-.plus-sign {
-    font-size: 20px;
-    margin-right: 5px; 
-}
-/* Style for the Add button */
-.add-btn {
-    background-color: #28a745; /* Green background */
-    color: white; /* White text */
-    border: none; /* No border */
-    border-radius: 30px; /* Rounded corners */
-    padding: 10px 20px; /* Padding around the button */
-    font-size: 18px; /* Text size */
-    cursor: pointer; /* Pointer on hover */
-    display: inline-flex; /* Aligns the symbol and text in a row */
-    align-items: center; /* Vertically center the content */
-    justify-content: center; /* Horizontally center the content */
-    text-align: center; 
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.add-btn:hover {
-    background-color: #218838; 
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.plus-sign {
-    font-size: 24px; 
-    margin-right: 10px; 
-}
-
-/* Stylish Modal */
-.modal {
-    display: none; 
-    position: fixed; /* Fixed position to stay on top */
-    z-index: 1050; /* Higher than most elements */
-    left: 50%; /* Center horizontally */
-    top: 50%; /* Center vertically */
-    transform: translate(-50%, -50%); /* Adjust for perfect centering */
-    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Animation for fading in */
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-/* Modal content */
-.modal-dialog {
-    width: 80%; /* Width of modal */
-    max-width: 600px;
-}
-
-.modal-content {
-    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Soft gradient background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    padding: 20px;
-    animation: slideIn 0.5s ease-out;
-}
-
-/* Animation for sliding in */
-@keyframes slideIn {
-    0% { transform: translate(-50%, -60%); }
-    100% { transform: translate(-50%, -50%); }
-}
-
-/* Modal Header */
-.modal-header {
-    border-bottom: none; /* No bottom border */
-    padding-bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-title {
-    font-size: 24px;
-    color: #343a40; /* Dark text */
-}
-
-.close {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.close:hover {
-    transform: scale(1.1); /* Slightly enlarge the close button on hover */
-}
-
-/* Form Elements */
-.modal-body {
-    padding: 20px 0;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    border-radius: 5px; /* Rounded corners */
-    border: 1px solid #ddd; /* Light border */
-    padding: 10px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
-
-.form-control:focus {
-    border-color: #28a745; /* Green border on focus */
-    box-shadow: 0px 0px 5px rgba(40, 167, 69, 0.5); /* Green glow */
-}
-
-/* Modal Footer */
-.modal-footer {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 10px;
-    padding-bottom: 0;
-}
-
-.btn-secondary, .btn-primary {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn-secondary {
-    background-color: #6c757d; /* Grey */
-}
-
-.btn-primary {
-    background-color: #007bff; /* Blue */
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268; /* Darker grey on hover */
-    transform: scale(1.05);
-}
-
-.btn-primary:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05);
-}
-    /* Animation */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100%;
+        background-color: #343a40;
+        padding-top: 20px;
+        padding-left: 10px;
+        color: white;
+        font-size: 18px;
         }
-        to {
-            opacity: 1;
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-    }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            margin-left: 250px; /* Space for the sidebar */
+            padding: 20px;
+        }
+
+        /* Table Styles */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .user-table thead {
+            background-color: #f4f4f4;
+        }
+
+        .user-table th, .user-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table tr:hover {
+            background-color: #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-table tr {
+            height: 60px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .modal-dialog {
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .modal-header {
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+        }
+
+        .close {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            transform: scale(1.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        /* Error message styling */
+        .error-message {
+            font-size: 12px;
+            color: red;
+        }
+
+        /* Add button styles */
+        .add-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        .plus-sign {
+            font-size: 24px;
+            margin-right: 10px;
+        }
 </style>
 <body>
     <div class="dashboard">
@@ -367,7 +172,6 @@
                             <th>Coupon Code</th>
                             <th>Offer</th>
                             <th>Min Amount</th>
-                            <th>Max Amount</th>
                             <th>Expire Date</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -379,7 +183,6 @@
                             <td><%= coupon[i].name %></td>
                             <td><%= coupon[i].OfferPrice %>%</td>
                             <td><%= coupon[i].minimumPrice %></td>
-                            <td><%= coupon[i].maximumPrice %></td>
                             <td><%= new Date(coupon[i].expireOn).toLocaleDateString('en-GB') %></td>                 
                             <td><%= coupon[i].isList %></td>
                             <td>
@@ -404,11 +207,6 @@
                 <div class="modal-body">
                     <form id="addCouponForm" method="post">
                         <div class="form-group">
-                            <label for="couponCode">Coupon Code</label>
-                            <input type="text" class="form-control" id="couponCode" name="name" placeholder="Enter Coupon Code">
-                            <div id="couponCodeError" class="error-message text-danger"></div> <!-- Error message here -->
-                        </div>
-                        <div class="form-group">
                             <label for="offer">Offer (%)</label>
                             <input type="number" class="form-control" id="offer" name="OfferPrice" placeholder="Offer Percentage">
                             <div id="offerError" class="error-message text-danger"></div> <!-- Error message here -->
@@ -417,11 +215,6 @@
                             <label for="minAmount">Min Amount</label>
                             <input type="number" class="form-control" id="minAmount" name="minimumPrice" placeholder="Min Amount">
                             <div id="minAmountError" class="error-message text-danger"></div> <!-- Error message here -->
-                        </div>
-                        <div class="form-group">
-                            <label for="maxAmount">Max Amount</label>
-                            <input type="number" class="form-control" id="maxAmount" name="maximumPrice" placeholder="Max Amount">
-                            <div id="maxAmountError" class="error-message text-danger"></div> <!-- Error message here -->
                         </div>
                         <div class="form-group">
                             <label for="expireDate">Expire Date</label>
@@ -438,6 +231,8 @@
         </div>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
       
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -446,12 +241,9 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-   // Show the modal when the Add button is clicked
 document.getElementById('addCouponBtn').addEventListener('click', function() {
     document.getElementById('addCouponModal').style.display = 'block';
 });
-
-// Hide the modal when the Close button is clicked
 document.getElementById('closeModalBtn').addEventListener('click', function() {
     document.getElementById('addCouponModal').style.display = 'none';
 });
@@ -461,24 +253,20 @@ document.getElementById('closeModalBtn2').addEventListener('click', function() {
 
 
 addCouponForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
+    event.preventDefault(); 
 
-    document.getElementById('couponCodeError').textContent = '';
     document.getElementById('offerError').textContent = '';
     document.getElementById('minAmountError').textContent = '';
-    document.getElementById('maxAmountError').textContent = '';
     document.getElementById('expireDateError').textContent = '';
 
     const formData = new FormData(addCouponForm);
     const couponData = {
-        name: formData.get('name'),
         OfferPrice: formData.get('OfferPrice'),
         minimumPrice: formData.get('minimumPrice'),
-        maximumPrice: formData.get('maximumPrice'),
         expireOn: formData.get('expireOn')
     };
 
-    fetch('/admin/add-coupon', { // Posting to /admin/add-coupon
+    fetch('/admin/add-coupon', {
         method: 'POST',
         body: JSON.stringify(couponData),
         headers: {
@@ -488,23 +276,16 @@ addCouponForm.addEventListener('submit', function(event) {
     .then(response => response.json())
     .then(data => {
         if (data.errors) {
-            if (data.errors.name) {
-                document.getElementById('couponCodeError').textContent = data.errors.name;
-            }
             if (data.errors.OfferPrice) {
                 document.getElementById('offerError').textContent = data.errors.OfferPrice;
             }
             if (data.errors.minimumPrice) {
                 document.getElementById('minAmountError').textContent = data.errors.minimumPrice;
             }
-            if (data.errors.maximumPrice) {
-                document.getElementById('maxAmountError').textContent = data.errors.maximumPrice;
-            }
             if (data.errors.expireOn) {
                 document.getElementById('expireDateError').textContent = data.errors.expireOn;
             }
         } else {
-            alert('Coupon added successfully!')
             window.location.reload()
             addCouponForm.reset();
         }
@@ -516,28 +297,57 @@ addCouponForm.addEventListener('submit', function(event) {
 
 
  / delete coupon  /
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
             const couponId = this.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this coupon?')) {
-                fetch(`/admin/delete-coupon/${couponId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Coupon deleted successfully!');
-                        window.location.reload(); 
-                    } else {
-                        alert('Error deleting coupon.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
+            
+            // Use SweetAlert2 for confirmation before deletion
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If confirmed, proceed to delete the coupon
+                    fetch(`/admin/delete-coupon/${couponId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Success message with SweetAlert
+                            Swal.fire(
+                                'Deleted!',
+                                'The coupon has been deleted.',
+                                'success'
+                            ).then(() => {
+                                window.location.reload(); // Reload after success
+                            });
+                        } else {
+                            // Error message with SweetAlert
+                            Swal.fire(
+                                'Error!',
+                                'There was an issue deleting the coupon.',
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle errors with SweetAlert
+                        Swal.fire(
+                            'Oops!',
+                            'Something went wrong, please try again.',
+                            'error'
+                        );
+                    });
+                }
+            });
         });
     });
 });

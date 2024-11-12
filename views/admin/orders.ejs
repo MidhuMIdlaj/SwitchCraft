@@ -9,46 +9,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <style>
-      body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-}
+ 
 
-/* Dashboard Container */
-.dashboard-container {
-    display: flex;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.dashboard {
-    display: flex;
-}
-
-/* Toggle button */
-.btn-toggle {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.btn-toggle:hover {
-    color: #ffcc00;
-}
+/*  
 
 /* Sidebar Menu */
-
-
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            background-color: #fff;
-            position: relative;
-        }
         .orders-table {
             width: 100%;
             border-collapse: collapse;
@@ -80,6 +45,8 @@
         .edit-btn:hover {
             background-color: #0056b3;
         }
+
+
     </style>
     <div class="dashboard-container">
         <%- include('../partials/admin/header') %>
@@ -94,6 +61,7 @@
                         <th>Status</th>
                         <th>Items</th>
                         <th>Date</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,20 +70,8 @@
                             <tr>
                                 <td><%= order.orderId %></td>
 
-                                <% let totalPriceDisplay = order.totalPrice; %>
-            
-                                <% if (order.coupon.name) { %>
-                                    <% totalPriceDisplay = order.totalPrice - (order.totalPrice * order.coupon.offer / 100) + 50; %>
-                                <% } else { %>
-                                    <% let hasOffer = false; %>
-                                    <% order.orderedItem.forEach(item => { %>
-                                        <% if (item.productId && item.price !== item.productId.price) { %>
-                                            hasOffer = true;
-                                            totalPriceDisplay = order.finalAmount + 50;
-                                        <% } %>
-                                    <% }); %>
-                                <% } %>
-                                <td>₹ <%= totalPriceDisplay.toFixed(2) %></td>
+                             
+                                <td>₹ <%= order.finalAmount.toFixed(2)  %></td>
                                 <td><%= order.userId.name %></td>
                                 <td>
                                     <select onchange="handleStatusChange('<%= order._id %>', this.value)" 
@@ -142,6 +98,23 @@
                                     </ul>
                                 </td>
                                 <td><%= new Date(order.createdOn).toLocaleDateString() %></td>
+                                <td> 
+                                    <button 
+                            style="background-color: black; width: 70px; height: 30px; color: white;" 
+                            onclick="showOrderDetails(
+                                '<%= order.orderId %>', 
+                                '<%= order.finalAmount.toFixed(2) %>', 
+                                '<%= order.userId.name %>', 
+                                '<%= new Date(order.createdOn).toLocaleDateString() %>', 
+                                '<%= order.paymentMethod %>', 
+                                '<%= order.discount %>', 
+                                <%= JSON.stringify(order.orderedItem) %>, 
+                                <%= JSON.stringify(order.address) %>
+                            )">
+                            View
+                        </button>
+
+                                </td>      
                             </tr>
                         <% }); %>
                     <% } else { %>
@@ -154,12 +127,79 @@
             </table>
         </div>
     </div>
- 
+    
+
+    <div id="orderModal" style="display: none;">
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+            <div style="position: relative; margin: 5% auto; width: 50%; padding: 20px; background-color: #fff; border-radius: 8px;">
+                <span onclick="closeModal()" style="float: right; font-size: 20px; cursor: pointer;">&times;</span>
+                <h2>Order Details</h2>
+                <p><strong>Order ID:</strong> <span id="modalOrderId"></span></p>
+                <p><strong>Total Price:</strong> ₹<span id="modalTotalPrice"></span></p>
+                <p><strong>Username:</strong> <span id="modalUsername"></span></p>
+                <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                <p><strong>paymentMethod:</strong> <span id="modalPaymentMethod"></span></p>
+                <p><strong>Coupon Price:</strong> <span id="modalDiscount"></span></p>
+
+                <h3>Items:</h3>
+                <ul id="modalItemsList"></ul>
+
+                <h3>Address:</h3>
+                <p><strong>Name:</strong> <span id="modalAddressName"></span></p>
+                <p><strong>House Number:</strong> <span id="modalAddressHouseNumber"></span></p>
+                <p><strong>Area:</strong> <span id="modalAddressArea"></span></p>
+                <p><strong>Landmark:</strong> <span id="modalAddressLandmark"></span></p>
+                <p><strong>Pin Code:</strong> <span id="modalAddressPinCode"></span></p>
+                <p><strong>Phone Number:</strong> <span id="modalAddressPhoneNumber"></span></p>
+                <p><strong>District:</strong> <span id="modalAddressDistrict"></span></p>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
-        
+     function showOrderDetails(orderId, finalAmount, username, createdOn, paymentMethod ,discount, orderedItems, address) {
+    document.getElementById('modalOrderId').textContent = orderId;
+    document.getElementById('modalTotalPrice').textContent = finalAmount;
+    document.getElementById('modalUsername').textContent = username;
+    document.getElementById('modalOrderDate').textContent = createdOn;
+    document.getElementById('modalPaymentMethod').textContent = paymentMethod;
+    document.getElementById('modalDiscount').textContent = discount;
+
+        // Populate Address Fields
+    document.getElementById('modalAddressName').textContent = `${address.firstName} ${address.lastName}`;
+    document.getElementById('modalAddressHouseNumber').textContent = address.houseNumber;
+    document.getElementById('modalAddressArea').textContent = address.area;
+    document.getElementById('modalAddressLandmark').textContent = address.landmark;
+    document.getElementById('modalAddressPinCode').textContent = address.pinCode;
+    document.getElementById('modalAddressPhoneNumber').textContent = address.phoneNumber;
+    document.getElementById('modalAddressDistrict').textContent = address.district;
+
+    
+    const itemsList = document.getElementById('modalItemsList');
+    itemsList.innerHTML = ''; 
+    orderedItems.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.product.productName} - Qty: ${item.quantity}`;
+        itemsList.appendChild(listItem);
+    });
+    document.getElementById('orderModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('orderModal').style.display = 'none';
+}
+
+
+
+
+
+
         $(document).ready(function() {
             $('#ordersTable').DataTable({
               paging: true,
@@ -168,47 +208,57 @@
               pageLength: 7
             });
         });
-function handleStatusChange(orderId, newStatus) {
-    if (confirm(`Are you sure you want to change the order status to ${newStatus}?`)) {
-        fetch(`/admin/toggle-order-status/${orderId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status: newStatus })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
+        function handleStatusChange(orderId, newStatus) {
+    swal({
+        title: `Are you sure you want to change the order status to ${newStatus}?`,
+        icon: "warning",
+        buttons: ["Cancel", "Confirm"],
+        dangerMode: true, 
+    })
+    .then((willChange) => {
+        if (willChange) {
+            fetch(`/admin/toggle-order-status/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    swal({
+                        title: data.message,
+                        text: "Order status updated successfully!",
+                        icon: "success",
+                        button: "OK",
+                    }).then(() => {
+                        location.reload(); // Reload page after success
+                    });
+                } else {
+                    swal({
+                        title: data.message,
+                        text: `${data.message} Error updating status.`,
+                        icon: "error",
+                        button: "OK",
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
                 swal({
-              title: data.message,
-              text: "Order status updated successfully!",
-              icon: "success",
-              button: "back",
-              });
-                location.reload();
-            } else {
-                swal({
-              title: data.message,
-              text: data.message+"Error updating status",
-              icon: "error",
-              button: "back",
-              });
-            }
-        })
-        .catch(error => {
-            console.error('Error updating status:', error);
-            swal({
-              title: data.message,
-              text: "An error occurred.",
-              icon: "error",
-              button: "back",
-              });
-        });
-    } else {
-        location.reload();
-    }
+                    title: "Error",
+                    text: "An error occurred while updating the status.",
+                    icon: "error",
+                    button: "OK",
+                });
+            });
+        } else {
+            location.reload();
+        }
+    });
 }
+
     </script>
 
 </body>

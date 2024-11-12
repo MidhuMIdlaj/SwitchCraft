@@ -1,21 +1,21 @@
 const Order = require('../../models/orderSchema');
 const User = require('../../models/userscheema'); // Assuming you have a User model
 
-const loadOrders = async (req, res) => {
-    try {
-        if (req.session.admin) {
-            const orders = await Order.find()
-                .populate('userId', 'name') 
-                .populate('orderedItem.product', 'productName')
-            res.render('admin/orders', { orders });
-        } else {
-            res.redirect('/admin/login');
+    const loadOrders = async (req, res) => {
+        try {
+            if (req.session.admin) {
+                const orders = await Order.find()
+                    .populate('userId', 'name') 
+                    .populate('orderedItem.product', 'productName').sort({ createdOn: 1})
+                res.render('admin/orders', { orders });
+            } else {
+                res.redirect('/admin/login');
+            }
+        } catch (error) {
+            console.error('Error loading orders:', error);
+            res.status(500).send('Server error');
         }
-    } catch (error) {
-        console.error('Error loading orders:', error);
-        res.status(500).send('Server error');
-    }
-};
+    };
 
 
 const postOrder = async (req, res) => {

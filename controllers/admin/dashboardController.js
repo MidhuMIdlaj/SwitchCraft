@@ -150,9 +150,13 @@ const loadDashboard = async (req, res) => {
                 const date = new Date(order.createdOn).toLocaleDateString();
                 orderCounts[date] = (orderCounts[date] || 0) + 1;
             });
+            if (Object.keys(orderCounts).length === 0) {
+                const today = new Date();
+                const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+                orderCounts[formattedDate] = 0;
+            }     
             const chartLabels = Object.keys(orderCounts);
             const chartValues = Object.values(orderCounts);
-
 
             res.render('admin/dashboard', {
                 discount,

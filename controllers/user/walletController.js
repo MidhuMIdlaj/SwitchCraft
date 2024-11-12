@@ -5,16 +5,19 @@ const loadWallet = async (req, res) => {
         if (req.session.userData) {
             const userId = req.session.userData._id;
             const user = await User.findOne({ _id: userId, isBlocked: false });
-
             const page = parseInt(req.query.page) || 1;
             const limit = 6; 
             const skip = (page - 1) * limit;
 
 
+            const sortedTransactions = user.transaction
+            .sort((a, b) => b.createdOn - a.createdOn);
+
+
             const totalTransactions = user.transaction.length;
             const totalPages = Math.ceil(totalTransactions / limit);
 
-            const transactions = user.transaction.slice(skip, skip + limit);
+             const transactions = sortedTransactions.slice(skip, skip + limit);
 
             res.render('user/wallet', {
                 user,

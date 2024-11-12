@@ -25,15 +25,12 @@ const categoryLoad = async (req, res) => {
 
 const addCategory = async (req, res) => {
     const { name, type } = req.body;
-    console.log('Received data:', { name, type });
-
     try {
         const existingCategory = await category.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } });
-
         if (existingCategory) {
+
             return res.status(400).json({ message: 'Category already exists!' });
         }
-
         const newCategory = new category({
             name: name,
             type: type
@@ -66,7 +63,6 @@ const toggleCategoryStatus = async (req, res) => {
 / edit category/
 const updateCategory = async (req, res) => {
     const { id, name } = req.body;
-     console.log(id,name)
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ message: 'Invalid category ID' });
     }

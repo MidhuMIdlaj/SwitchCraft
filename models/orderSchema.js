@@ -98,12 +98,14 @@ const orderSchema = new Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ['Razorpay', 'COD'],
+        enum: ['Razorpay', 'COD',"wallet"],
     },
     paymentStatus: {
       type:  Boolean, 
       default : false
     }
+},{
+  timestamps:true
 });
 
 const Order = mongoose.model('Order', orderSchema);

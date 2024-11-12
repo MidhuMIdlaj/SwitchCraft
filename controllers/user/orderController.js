@@ -65,7 +65,7 @@ const getUserOrders = async (req, res) => {
             // Fetch the paginated orders for the user
             const orders = await Order.find({ userId })
                 .populate('orderedItem.product')
-                .sort({ createdOn: -1 })
+                .sort({ updatedAt: -1 })
                 .skip(skip)
                 .limit(limit);
 
@@ -131,10 +131,7 @@ const cancelOrder = async (req, res) => {
                 await product.save();
             }
         }
-
-         
-
-        if(order.paymentMethod == "Razorpay" || order.status == "Delivered"){
+        if(order.paymentMethod == "Razorpay" || order.status == "Delivered" || order.paymentMethod == "wallet"){
           const user = await User.findById(userId)
           user.wallet += order.finalAmount     
           

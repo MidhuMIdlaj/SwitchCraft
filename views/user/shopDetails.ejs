@@ -13,13 +13,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    
     <link href="/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <!-- Add this in your HTML header -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         /* Responsive adjustments */
@@ -132,15 +134,6 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
-/* 
-        .active-img {
-            border: 2px solid #0d6efd;
-        }
-
-        .breadcrumb-item a {
-            text-decoration: none;
-            color: #0d6efd;
-        } */
 
         .breadcrumb-item a:hover {
             text-decoration: underline;
@@ -214,15 +207,11 @@
                 margin-bottom: 15px;
                 border-bottom: 1px solid #ddd;
             }
-
-            /* Adjust product image sizes for smaller screens */
             .product-img {
                 max-width: 100%;
                 height: auto;
                 margin-bottom: 10px;
             }
-
-            /* Related products grid */
             .related-products .row {
                 display: flex;
                 flex-wrap: wrap;
@@ -236,8 +225,6 @@
             .related-product-link {
                 display: block;
             }
-
-            /* Change small images for mobile */
             .small-images img {
                 max-width: 60px;
                 margin: 5px 0;
@@ -499,8 +486,6 @@
                     </h1>
                 </a>
             </div>
-    
-            <!-- Desktop Search Bar - Hidden on Mobile -->
             <div class="col d-none d-lg-block">
                 <form action="" method="GET" class="input-group">
                     <input type="text" name="searchQuery" class="form-control" placeholder="Search for products">
@@ -509,8 +494,6 @@
                     </div>
                 </form>
             </div>
-    
-            <!-- Navigation Section -->
             <div class="col-auto">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light py-0">
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -543,7 +526,9 @@
                                             <a class="dropdown-item" href="/wallet">Wallet</a>
                                             <a class="dropdown-item" href="/wishlist">Wishlist</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                          <!-- Logout Button in the Dropdown Menu -->
+                                           <a class="dropdown-item" href="javascript:void(0);" onclick="confirmLogout()">Logout</a>
+
                                         </div>
                                     </div>
                                 <% } else { %>
@@ -557,14 +542,14 @@
             </div>
         </div>
     </div>
-        <div class="row">
-<div class="col-md-6">
-    <div class="row">
+<div class="row">
+     <div class="col-md-6">
+      <div class="row">
         <div class="col-2 small-images">
             <% product.productImage.forEach((image, index) => { %>
                 <img src="<%= image %>" alt="<%= product.productName %>"
                     class="small-img <%= index === 0 ? 'active-img' : '' %>"
-                    onclick="changeImage('<%= image %>', this)">
+                     onclick="changeImage('<%= image %>', this)">
             <% }) %>
         </div>
         <div class="col-10 zoom-container">
@@ -576,11 +561,9 @@
                     class="product-img">
             <% } %>
         </div>
-    </div>
-</div>
-
-
-<div class="col-md-6">
+      </div>
+     </div>
+ <div class="col-md-6">
     <h2>
         <%= product.productName %>
     </h2>
@@ -630,18 +613,9 @@
         <% } %>
     </form>
     <br>
-    <h6>
-        <% if (messages.error) { %>
-            <div class="alert alert-danger" style="color: #db4437;">
-                <%= messages.error %>
-            </div>
-        <% } %>
-        <div id="errorMessage" style="color: #db4437;" class="error msg"></div>
-    </h6>
-</div>
+  </div>
 
 
-        <!-- Related Products -->
         <div class="related-products mt-5">
             <h4>Related Products</h4>
             <div class="row">
@@ -664,17 +638,24 @@
                 <% }) %>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
-         <!-- Footer Start -->
+        <% if (errorMessage) { %>
+            <script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '<%= errorMessage %>'
+                    });
+                };
+            </script>
+        <% } %>
+        
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <a href="" class="text-decoration-none">
                     <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">SC</span>SwitchCraft</h1>
                 </a>
-                <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
@@ -725,13 +706,8 @@
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-dark">
                     &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All Rights Reserved. 
-					
-					<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
 					Designed by <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a>
                 </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
             </div>
         </div>
     </div>
@@ -758,9 +734,7 @@
             setTimeout(() => {
                 mainImage.classList.add('zoom-image');
             }, 10);
-        }
-                    
-         
+        } 
             const zoomContainer = document.querySelector('.zoom-container');
             const zoomImage = document.querySelector('.zoom-image');
 
@@ -779,38 +753,26 @@
             });
 
     </script>
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will be logged out of your account.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, log me out',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the logout route if confirmed
+                    window.location.href = '/logout';
+                }
+            });
+        }
+    </script>    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </body>
 </html>
-<script>
-function changeImage(src) {
-    const mainImage = document.getElementById('main-image');
-    mainImage.src = src;
-
-    // Update the zoom image source to the new main image
-    mainImage.classList.remove('zoom-image'); // Reset class to refresh
-    setTimeout(() => {
-        mainImage.classList.add('zoom-image');
-    }, 10);
-}
-
-// Zoom functionality code here
-let zoomContainer = document.querySelector('.zoom-container');
-let zoomImage = document.querySelector('.zoom-image');
-
-zoomContainer.addEventListener('mousemove', (e) => {
-    const { left, top, width, height } = zoomContainer.getBoundingClientRect();
-    const x = e.clientX - left; // Mouse X relative to zoom container
-    const y = e.clientY - top;  // Mouse Y relative to zoom container
-
-    const xPercent = (x / width) * 100; // Calculate percentage of mouse position
-    const yPercent = (y / height) * 100; // Calculate percentage of mouse position
-
-    zoomImage.style.transformOrigin = ${xPercent}% ${yPercent}%; // Set the transform origin
-});
-
-zoomContainer.addEventListener('mouseleave', () => {
-    zoomImage.style.transformOrigin = '50% 50%';
-});
-</script>

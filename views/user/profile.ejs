@@ -672,6 +672,8 @@
             </form>
         </div>
     </div>
+
+
     <!-- Bootstrap Modal for Editing Address -->
     <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
         aria-hidden="true">
@@ -781,6 +783,8 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -813,7 +817,6 @@
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
-
         };
 
         // Form validation for update profile//
@@ -966,36 +969,46 @@
 
             / delete  address/
             $(document).ready(function () {
-                $('.delete-btn').on('click', function () {
-                    var addressId = $(this).data('id');
+    $('.delete-btn').on('click', function () {
+        var addressId = $(this).data('id');
 
-                    if (confirm('Are you sure you want to delete this address?')) {
-                        fetch(`/deleteAddress/${addressId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(result => {
-                                if (result.success) {
-                                    toastr.success(result.message);
-                                    setTimeout(function () {
-                                        window.location.href = '/profile';
-                                    }, 1500);
-                                } else {
-
-                                    toastr.error(result.message || 'Error deleting address.');
-                                }
-                            })
-                            .catch(error => {
-                                toastr.error('An unexpected error occurred.');
-                                console.error('Error:', error);
-                            })
+        // Use SweetAlert2 for the confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to delete this address?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with deletion if confirmed
+                fetch(`/deleteAddress/${addressId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                });
-            });
-
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            setTimeout(function () {
+                                window.location.href = '/profile';
+                            }, 1500);
+                        } else {
+                            toastr.error(result.message || 'Error deleting address.');
+                        }
+                    })
+                    .catch(error => {
+                        toastr.error('An unexpected error occurred.');
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    });
+});
 
 
     </script>

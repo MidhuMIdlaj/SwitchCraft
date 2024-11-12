@@ -19,35 +19,22 @@ const User = require('../../models/userscheema')
     }
  }
 
+ const toggleCustomerStatus = async (req, res) => {
+    const { userId } = req.params;
+    const { isBlocked } = req.body;
 
+    try {
+        await User.updateOne({ _id: userId }, { $set: { isBlocked: isBlocked } });
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating block status:', error);
+        res.json({ success: false });
+    }
+};
 
- const customerBlock = async(req,res)=>{
-      try {
-        let id = req.query.id
-        await User.updateOne({_id:id}, {$set:{isBlocked : true}})
-        if(req.session.userData){
-            delete req.session.userData
-        }
-        res.redirect('/admin/users?blocked=true');
-      } catch (error) {
-        console.log("error customerBlock", error)
-        res.redirect('/admin/users?blocked=false');  
-      }
- }
-
- const  customerUnBlock= async(req,res)=>{
-        try {
-            let id  = req.query.id
-            await User.updateOne({_id: id}, {$set:{isBlocked: false}})
-            res.redirect("/admin/users")
-        } catch (error) {
-            console.log("customerUnBlock error", error)
-        }
- }
-     
 
  module.exports ={
     customerLoad,
-    customerBlock,
-    customerUnBlock
+    toggleCustomerStatus
+   
  }

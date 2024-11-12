@@ -11,7 +11,7 @@ const loadProduct = async (req, res) => {
     if (req.session.admin) {
       const productData = await Product.find({})
         .populate('brand', 'categoryOffer name') 
-        .populate('type', 'categoryOffer name');
+        .populate('type', 'categoryOffer name').sort({ createdAt: -1 })
       const updatedProductData = productData.map(product => {
         const categoryOffer = product.brand?.categoryOffer || 0; 
         const productOffer = product.productOffer || 0;

@@ -9,6 +9,10 @@
       <meta content="Free HTML Templates" name="keywords">
       <meta content="Free HTML Templates" name="description">
       <link rel="stylesheet" href="style.css">
+
+      <!-- Add this in your HTML header -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
       <style>
   
           .dropdown {
@@ -106,7 +110,8 @@
                                             <a class="dropdown-item" href="/wallet">Wallet</a>
                                             <a class="dropdown-item" href="/wishlist">Wishlist</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                           <a class="dropdown-item" href="javascript:void(0);" onclick="confirmLogout()">Logout</a>
+
                                         </div>
                                     </div>
                                 <% } else { %>
@@ -120,6 +125,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log me out',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+</script>
 
   
      
