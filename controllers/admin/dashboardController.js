@@ -72,7 +72,8 @@ const loadDashboard = async (req, res) => {
                   }
                 }
               ]);
-              const totalAmount = totalAmountSum[0].totalAmount
+              const totalAmount = totalAmountSum.length > 0 ? totalAmountSum[0].totalAmount : 0;
+
               
                // best selling  10 product //
               const bestSellingProduct = await Order.aggregate([
@@ -122,14 +123,13 @@ const loadDashboard = async (req, res) => {
               ]);
               
 
-              const discount = await Order.aggregate([
-                {
-                  $group: {
-                    _id: null,
-                    totalDiscount: { $sum: "$discount" } 
-                  }
-                }
-              ]);
+             const discount = await Order.aggregate([
+                { $match: { orderStatus: "Delivered" } },
+                { $group: { _id: null, totalDiscount: { $sum: "$discount" } } }
+                ]);
+
+                const totalDiscount = discount.length > 0 ? discount[0].totalDiscount : 0;
+
              
 
               const topBrandIds = topBrands.map(brand => brand._id);
@@ -165,6 +165,7 @@ const loadDashboard = async (req, res) => {
                 top10BrandList ,
                 totalAmount,
                 orders,
+                discount: [{ totalDiscount }],
                 startDate: startDate || '',
                 endDate: endDate || '',
                 selectedStatus: status || '',
